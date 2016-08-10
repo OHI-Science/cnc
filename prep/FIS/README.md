@@ -1,14 +1,15 @@
 # README
 
-Use these folder to organize and explore data for your OHI assessment. Edit this README file to describe the data you explore and how you process them. 
+## fis_meancatch
+### Source
+Direction des Affaires Maritimes (DAM)
+Contains time series data from 2011-2015 for 15 species and "others" category
 
-For example, you could include: 
+### Data url/website
+http://www.affmar.gouv.nc/portal/page/portal/affmar/peche/Lesstatistiquesdelapecheetdesproduitsdelamer
 
-- data source
-- data url or website
-- date accessed, contact information
-- processing plan
+### Date accessed
+21 July 2016
 
-It is best to script (for example, in the R programming language) as much as you can so that it is transparent and reproducible. 
-
-The [OHI Manual R tutorials for OHI](http://ohi-science.org/manual/#appendix-5-r-tutorials-for-ohi) has instruction and resources about how to work with data in R. 
+### Processing plan
+Merged catch_per_species with reef_catch_per_species to create fis_meancatch

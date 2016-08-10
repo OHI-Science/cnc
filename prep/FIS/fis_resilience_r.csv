@@ -1,0 +1,16 @@
+rgn_id,species,resilience,r (year-1)
+1,thon blanc,medium,0.2 – 1
+1,thon obèse,low,0.05 – 0.5
+1,espadon,low,0.05 – 0.5
+1,marlin rayé,low,0.05 – 0.5
+1,marlin bleu,low,0.05 – 0.5
+1,marlin noir,medium,0.2 – 1
+1,wahoo,medium,0.2 – 1
+1,saumon des dieux,low,0.05 – 0.5
+1,mahi mahi,high,0.6 – 1.5
+1,voilier,low,0.05 – 0.5
+1,marlineau,,
+1,other,,
+1,Sea Cucumber,,
+1,Lobsters,,
+1,Deep-sea Snappers,,
