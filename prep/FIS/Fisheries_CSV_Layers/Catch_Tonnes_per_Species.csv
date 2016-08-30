@@ -1,85 +1,85 @@
-rgn_id,species,year,tonnes,lbs
-1,thon blanc,2015,"1,529 ",3058874
-1,thon blanc,2014,"1,738 ",3475876
-1,thon blanc,2013,"1,565 ",3129064
-1,thon blanc,2012,"1,684 ",3367314
-1,thon blanc,2011,"1,669 ",3337248
-1,thon blanc,2010,"1,939 ",3878000
-1,thon blanc,2009,"1,649 ",3298000
-1,thon blanc,2008,"1,506 ",3012000
-1,thon jaune,2015,807 ,1613640
-1,thon jaune,2014,705 ,1410726
-1,thon jaune,2013,500 ,1000020
-1,thon jaune,2012,549 ,1097172
-1,thon jaune,2011,596 ,1192510
-1,thon jaune,2010,505 ,1010000
-1,thon jaune,2009,487 ,974000
-1,thon jaune,2008,426 ,852000
-1,thon obèse,2015,59 ,117992
-1,thon obèse,2014,58 ,115880
-1,thon obèse,2013,57 ,114206
-1,thon obèse,2012,50 ,100148
-1,thon obèse,2011,48 ,96084
-1,thon obèse,2010,44 ,88000
-1,thon obèse,2009,51 ,102000
-1,thon obèse,2008,62 ,124000
-1,espadon,2015,9 ,17186
-1,espadon,2014,12 ,23756
-1,espadon,2013,8 ,16856
-1,espadon,2012,11 ,21618
-1,espadon,2011,12 ,23430
-1,espadon,2010,8 ,16000
-1,espadon,2009,7 ,14000
-1,espadon,2008,15 ,30000
-1,marlin rayé,2015,53 ,105290
-1,marlin rayé,2014,48 ,95134
-1,marlin rayé,2013,44 ,88186
-1,marlin rayé,2012,58 ,115060
-1,marlin rayé,2011,73 ,145982
-1,marlin bleu,2015,21 ,41182
-1,marlin bleu,2014,41 ,82196
-1,marlin bleu,2013,17 ,34614
-1,marlin bleu,2012,16 ,31358
-1,marlin bleu,2011,27 ,54846
-1,marlin noir,2015,32 ,64678
-1,marlin noir,2014,35 ,69574
-1,marlin noir,2013,35 ,70374
-1,marlin noir,2012,43 ,85574
-1,marlin noir,2011,48 ,96084
-1,marlin (all sp),2013,104 ,208000
-1,marlin (all sp),2012,123 ,246000
-1,marlin (all sp),2011,154 ,308000
-1,marlin (all sp),2010,117 ,234000
-1,marlin (all sp),2009,114 ,228000
-1,marlin (all sp),2008,150 ,300000
-1,marlin (all sp),2007,112 ,224000
-1,wahoo,2015,24 ,48422
-1,wahoo,2014,41 ,82058
-1,wahoo,2013,36 ,71792
-1,wahoo,2012,35 ,69970
-1,wahoo,2011,51 ,101648
-1,saumon des dieux,2015,53 ,106804
-1,saumon des dieux,2014,99 ,198666
-1,saumon des dieux,2013,79 ,157006
-1,saumon des dieux,2012,75 ,150078
-1,saumon des dieux,2011,73 ,145032
-1,mahi mahi,2015,98 ,195812
-1,mahi mahi,2014,150 ,299008
-1,mahi mahi,2013,91 ,181232
-1,mahi mahi,2012,95 ,189728
-1,mahi mahi,2011,117 ,234306
-1,voilier,2015,6 ,11642
-1,voilier,2014,6 ,11238
-1,voilier,2013,5 ,9826
-1,voilier,2012,5 ,9236
-1,voilier,2011,7 ,14456
-1,marlineau,2015,11 ,22736
-1,marlineau,2014,15 ,30786
-1,marlineau,2013,13 ,25394
-1,marlineau,2012,9 ,17946
-1,marlineau,2011,13 ,26838
-1,other,2015,6 ,12806
-1,other,2014,3 ,6678
-1,other,2013,4 ,7432
-1,other,2012,4 ,8268
-1,other,2011,10 ,19006
+rgn_id,species,scientific_name,year,tonnes,lbs
+1,thon blanc,Thunnus alalunga,2015,"1,529",3058874
+1,thon blanc,Thunnus alalunga,2014,"1,738",3475876
+1,thon blanc,Thunnus alalunga,2013,"1,565",3129064
+1,thon blanc,Thunnus alalunga,2012,"1,684",3367314
+1,thon blanc,Thunnus alalunga,2011,"1,669",3337248
+1,thon blanc,Thunnus alalunga,2010,"1,939",3878000
+1,thon blanc,Thunnus alalunga,2009,"1,649",3298000
+1,thon blanc,Thunnus alalunga,2008,"1,506",3012000
+1,thon jaune,Thunnus albacares,2015,807,1613640
+1,thon jaune,Thunnus albacares,2014,705,1410726
+1,thon jaune,Thunnus albacares,2013,500,1000020
+1,thon jaune,Thunnus albacares,2012,549,1097172
+1,thon jaune,Thunnus albacares,2011,596,1192510
+1,thon jaune,Thunnus albacares,2010,505,1010000
+1,thon jaune,Thunnus albacares,2009,487,974000
+1,thon jaune,Thunnus albacares,2008,426,852000
+1,thon obèse,Thunnus obesus,2015,59,117992
+1,thon obèse,Thunnus obesus,2014,58,115880
+1,thon obèse,Thunnus obesus,2013,57,114206
+1,thon obèse,Thunnus obesus,2012,50,100148
+1,thon obèse,Thunnus obesus,2011,48,96084
+1,thon obèse,Thunnus obesus,2010,44,88000
+1,thon obèse,Thunnus obesus,2009,51,102000
+1,thon obèse,Thunnus obesus,2008,62,124000
+1,espadon,Xiphias gladius,2015,9,17186
+1,espadon,Xiphias gladius,2014,12,23756
+1,espadon,Xiphias gladius,2013,8,16856
+1,espadon,Xiphias gladius,2012,11,21618
+1,espadon,Xiphias gladius,2011,12,23430
+1,espadon,Xiphias gladius,2010,8,16000
+1,espadon,Xiphias gladius,2009,7,14000
+1,espadon,Xiphias gladius,2008,15,30000
+1,marlin rayé,Kajikia audax,2015,53,105290
+1,marlin rayé,Kajikia audax,2014,48,95134
+1,marlin rayé,Kajikia audax,2013,44,88186
+1,marlin rayé,Kajikia audax,2012,58,115060
+1,marlin rayé,Kajikia audax,2011,73,145982
+1,marlin bleu,Makaira mazara,2015,21,41182
+1,marlin bleu,Makaira mazara,2014,41,82196
+1,marlin bleu,Makaira mazara,2013,17,34614
+1,marlin bleu,Makaira mazara,2012,16,31358
+1,marlin bleu,Makaira mazara,2011,27,54846
+1,marlin noir,Istiompax indica,2015,32,64678
+1,marlin noir,Istiompax indica,2014,35,69574
+1,marlin noir,Istiompax indica,2013,35,70374
+1,marlin noir,Istiompax indica,2012,43,85574
+1,marlin noir,Istiompax indica,2011,48,96084
+1,marlin (all sp),,2013,104,208000
+1,marlin (all sp),,2012,123,246000
+1,marlin (all sp),,2011,154,308000
+1,marlin (all sp),,2010,117,234000
+1,marlin (all sp),,2009,114,228000
+1,marlin (all sp),,2008,150,300000
+1,marlin (all sp),,2007,112,224000
+1,wahoo,Acanthocybium solandri,2015,24,48422
+1,wahoo,Acanthocybium solandri,2014,41,82058
+1,wahoo,Acanthocybium solandri,2013,36,71792
+1,wahoo,Acanthocybium solandri,2012,35,69970
+1,wahoo,Acanthocybium solandri,2011,51,101648
+1,saumon des dieux,Lampris guttatus,2015,53,106804
+1,saumon des dieux,Lampris guttatus,2014,99,198666
+1,saumon des dieux,Lampris guttatus,2013,79,157006
+1,saumon des dieux,Lampris guttatus,2012,75,150078
+1,saumon des dieux,Lampris guttatus,2011,73,145032
+1,mahi mahi,Coryphaena hippurus,2015,98,195812
+1,mahi mahi,Coryphaena hippurus,2014,150,299008
+1,mahi mahi,Coryphaena hippurus,2013,91,181232
+1,mahi mahi,Coryphaena hippurus,2012,95,189728
+1,mahi mahi,Coryphaena hippurus,2011,117,234306
+1,voilier,Istiophorus platypterus,2015,6,11642
+1,voilier,Istiophorus platypterus,2014,6,11238
+1,voilier,Istiophorus platypterus,2013,5,9826
+1,voilier,Istiophorus platypterus,2012,5,9236
+1,voilier,Istiophorus platypterus,2011,7,14456
+1,marlineau,Tetrapturus angustirostris,2015,11,22736
+1,marlineau,Tetrapturus angustirostris,2014,15,30786
+1,marlineau,Tetrapturus angustirostris,2013,13,25394
+1,marlineau,Tetrapturus angustirostris,2012,9,17946
+1,marlineau,Tetrapturus angustirostris,2011,13,26838
+1,other,,2015,6,12806
+1,other,,2014,3,6678
+1,other,,2013,4,7432
+1,other,,2012,4,8268
+1,other,,2011,10,19006

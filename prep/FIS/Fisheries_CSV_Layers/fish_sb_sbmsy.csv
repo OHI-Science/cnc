@@ -34,12 +34,18 @@ rgn_id,,species,year,sb_sbmsy,ref
 1,striped marlin,Kajikia audax,2015,,
 1,striped marlin,Kajikia audax,2014,,
 1,striped marlin,Kajikia audax,2013,0.39,2015 atock assessment ISCT
-1,striped marlin,Kajikia audax,2012,0.36,
-1,striped marlin,Kajikia audax,2011,0.31,
-1,striped marlin,Kajikia audax,2010,0.35,
-1,,Kajikia audax,2009,0.34,
-1,,Kajikia audax,2008,0.42,
-1,,Makaira mazara,2015,,
+1,striped marlin,Kajikia audax,2012,0.36,2016 atock assessment ISCT
+1,striped marlin,Kajikia audax,2011,0.31,2017 atock assessment ISCT
+1,striped marlin,Kajikia audax,2010,0.35,2018 atock assessment ISCT
+1,,Kajikia audax,2009,0.34,2019 atock assessment ISCT
+1,,Kajikia audax,2008,0.42,2020 atock assessment ISCT
+1,,Makaira mazara,2005,1.369327491,global OHI b_bmsy
+1,,Makaira mazara,2006,1.328784709,global OHI b_bmsy
+1,,Makaira mazara,2007,1.281373942,global OHI b_bmsy
+1,,Makaira mazara,2008,1.239129136,global OHI b_bmsy
+1,,Makaira mazara,2009,1.191379862,global OHI b_bmsy
+1,,Makaira mazara,2010,1.139800193,global OHI b_bmsy
+2,,Makaira mazara,2015,,
 1,,Makaira mazara,2014,,
 1,,Makaira mazara,2013,,
 1,,Makaira mazara,2012,,
@@ -49,11 +55,23 @@ rgn_id,,species,year,sb_sbmsy,ref
 1,,Istiompax indica,2013,,
 1,,Istiompax indica,2012,,
 1,,Istiompax indica,2011,,
+1,,Istiompax indica,2010,1.283291943,global OHI b_bmsy
+1,,Istiompax indica,2009,1.307358095,global OHI b_bmsy
+1,,Istiompax indica,2008,1.34107327,global OHI b_bmsy
+1,,Istiompax indica,2007,1.368152294,global OHI b_bmsy
+1,,Istiompax indica,2006,1.400305878,global OHI b_bmsy
+1,,Istiompax indica,2005,1.43997724,global OHI b_bmsy
 1,,Acanthocybium solandri,2015,,
 1,,Acanthocybium solandri,2014,,
 1,,Acanthocybium solandri,2013,,
 1,,Acanthocybium solandri,2012,,
 1,,Acanthocybium solandri,2011,,
+2,,Acanthocybium solandri,2010,1.241061162,global OHI b_bmsy
+3,,Acanthocybium solandri,2009,1.304033618,global OHI b_bmsy
+4,,Acanthocybium solandri,2008,1.358569516,global OHI b_bmsy
+5,,Acanthocybium solandri,2007,1.392481783,global OHI b_bmsy
+6,,Acanthocybium solandri,2006,1.398971497,global OHI b_bmsy
+7,,Acanthocybium solandri,2005,1.383109458,global OHI b_bmsy
 1,opah,Lampris guttatus,2015,,
 1,,Lampris guttatus,2014,,
 1,,Lampris guttatus,2013,,
@@ -94,3 +112,9 @@ rgn_id,,species,year,sb_sbmsy,ref
 1,,Pagrus auratus,2013,,
 1,,Pagrus auratus,2012,,
 1,,Pagrus auratus,2011,,
+1,,Pagrus auratus,2005,1.138532304,global OHI b_bmsy
+1,,Pagrus auratus,2006,1.152901705,global OHI b_bmsy
+1,,Pagrus auratus,2007,1.165686658,global OHI b_bmsy
+1,,Pagrus auratus,2008,1.175441406,global OHI b_bmsy
+1,,Pagrus auratus,2009,1.177841581,global OHI b_bmsy
+2,,Pagrus auratus,2010,1.174537841,global OHI b_bmsy
