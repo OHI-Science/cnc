@@ -1,0 +1,98 @@
+Kingdom,Phylum,Class,Order,Family,Genus,Species,ICONIC
+ANIMALIA,Chordata (Cord_s),Aves (Oiseaux),Charadriiforme,Laridae,Sterna,albifrons,Existence value
+ANIMALIA,Chordata (Cord_s),Aves (Oiseaux),Charadriiforme,Laridae,Sterna,anaethetus,Existence value
+ANIMALIA,Chordata (Cord_s),Aves (Oiseaux),Charadriiforme,Laridae,Sterna,bergii,Existence value
+ANIMALIA,Chordata (Cord_s),Aves (Oiseaux),Charadriiforme,Laridae,Sterna,dougallii,Existence value
+ANIMALIA,Chordata (Cord_s),Aves (Oiseaux),Charadriiforme,Laridae,Onychoprion,fuscatus,Existence value
+ANIMALIA,Chordata (Cord_s),Aves (Oiseaux),Charadriiforme,Laridae,Sterna,nereis,Existence value
+ANIMALIA,Chordata (Cord_s),Aves (Oiseaux),Charadriiforme,Laridae,Sterna,sumatrana,Existence value
+ANIMALIA,Chordata (Cord_s),Aves (Oiseaux),Suliforme,Fregatidae,Fregata,ariel,Existence value
+ANIMALIA,Chordata (Cord_s),Aves (Oiseaux),Suliforme,Fregatidae,Fregata,minor,Existence value
+ANIMALIA,Chordata (Cord_s),Aves (Oiseaux),Suliforme,Sulidae,Morus,serrator,Existence value
+ANIMALIA,Chordata (Cord_s),Aves (Oiseaux),Suliforme,Sulidae,Sula,dactylatra,Existence value
+ANIMALIA,Chordata (Cord_s),Aves (Oiseaux),Suliforme,Sulidae,Sula,leucogaster,Existence value
+ANIMALIA,Chordata (Cord_s),Aves (Oiseaux),Suliforme,Sulidae,Sula,sula,Existence value
+ANIMALIA,Chordata,Mammalia,,BALAENOPTERIDAE,Megaptera,novaeangliae,Existence value
+ANIMALIA,Chordata,Chondrichthyens,,MYLIOBATIDAE,Aetobatus,narinari,Esthetic Value
+ANIMALIA,Chordata,Chondrichthyens,,MYLIOBATIDAE,Manta,birostris,Esthetic Value
+ANIMALIA,Chordata,Chondrichthyens,,MYLIOBATIDAE,Manta,alfredi,Esthetic Value
+ANIMALIA,Chordata,Chondrichthyens,,ALOPIIDAE,Alopias,pelagicus,Cultural Value
+ANIMALIA,Chordata,Chondrichthyens,,ALOPIIDAE,Alopias,superciliosus,Cultural Value
+ANIMALIA,Chordata,Chondrichthyens,,ALOPIIDAE,Alopias,vulpinus,Cultural Value
+ANIMALIA,Chordata,Chondrichthyens,,CARCHARHINIDAE,Carcharhinus,albimarginatus,Cultural Value
+ANIMALIA,Chordata,Chondrichthyens,,CARCHARHINIDAE,Carcharhinus,amblyrhynchos,Cultural Value
+ANIMALIA,Chordata,Chondrichthyens,,CARCHARHINIDAE,Carcharhinus,brevipinna,Cultural Value
+ANIMALIA,Chordata,Chondrichthyens,,CARCHARHINIDAE,Carcharhinus,falciformis,Cultural Value
+ANIMALIA,Chordata,Chondrichthyens,,CARCHARHINIDAE,Carcharhinus,leucas,Cultural Value
+ANIMALIA,Chordata,Chondrichthyens,,CARCHARHINIDAE,Carcharhinus,limbatus,Cultural Value
+ANIMALIA,Chordata,Chondrichthyens,,CARCHARHINIDAE,Carcharhinus,longimanus,Cultural Value
+ANIMALIA,Chordata,Chondrichthyens,,CARCHARHINIDAE,Carcharhinus,melanopterus,Cultural Value
+ANIMALIA,Chordata,Chondrichthyens,,CARCHARHINIDAE,Carcharhinus,obscurus,Cultural Value
+ANIMALIA,Chordata,Chondrichthyens,,CARCHARHINIDAE,Carcharhinus,plumbeus,Cultural Value
+ANIMALIA,Chordata,Chondrichthyens,,CARCHARHINIDAE,Carcharhinus,sorrah,Cultural Value
+ANIMALIA,Chordata,Chondrichthyens,,LAMNIDAE,Carcharodon,carcharias,Cultural Value
+ANIMALIA,Chordata,Chondrichthyens,,CARCHARHINIDAE,Galeocerdo,cuvier,Cultural Value
+ANIMALIA,Chordata,Chondrichthyens,,LAMNIDAE,Isurus,oxyrinchus,Cultural Value
+ANIMALIA,Chordata,Chondrichthyens,,LAMNIDAE,Isurus,paucus,Cultural Value
+ANIMALIA,Chordata,Chondrichthyens,,GINGLYMOSTOMATIDAE,Nebrius,ferrugineus,Cultural Value
+ANIMALIA,Chordata,Chondrichthyens,,CARCHARHINIDAE,Negaprion,acutidens,Cultural Value
+ANIMALIA,Chordata,Chondrichthyens,,CARCHARHINIDAE,Prionace,glauca,Cultural Value
+ANIMALIA,Chordata,Chondrichthyens,,SPHYRNIDAE,Sphyrna,lewini,Cultural Value
+ANIMALIA,Chordata,Chondrichthyens,,SPHYRNIDAE,Sphyrna,mokarran,Cultural Value
+ANIMALIA,Chordata,Chondrichthyens,,STEGOSTOMATIDAE,Stegostoma,fasciatum,Cultural Value
+ANIMALIA,Chordata,Chondrichthyens,,CARCHARHINIDAE,Triaenodon,obesus,Cultural Value
+ANIMALIA,Chordata,Reptilia,,CHELONIIDAE,Caretta,caretta,Esthetic Value
+ANIMALIA,Chordata,Reptilia,,CHELONIIDAE,Chelonia,mydas,Cultural Value
+ANIMALIA,Chordata,Reptilia,,CHELONIIDAE,Eretmochelys,imbricata,Esthetic Value
+ANIMALIA,Chordata,Reptilia,,HYDROPHIIDAE,Laticauda,frontalis,Existence value
+ANIMALIA,Chordata,Reptilia,,HYDROPHIIDAE,Laticauda,laticaudata,Existence value
+ANIMALIA,Chordata,Reptilia,,HYDROPHIIDAE,Laticauda,saintgironsi,Existence value
+ANIMALIA,Chordata,Actinopterygii,,SCOMBRIDAE,Acanthocybium,solandri,Local Use
+ANIMALIA,Chordata,Actinopterygii,,ACANTHURIDAE,Acanthurus,dussumieri,Local Use
+ANIMALIA,Chordata,Actinopterygii,,SCARIDAE,Bolbometopon,muricatum,Local Use
+ANIMALIA,Chordata,Actinopterygii,,LABRIDAE,Cheilinus,undulatus,Local Use
+ANIMALIA,Chordata,Actinopterygii,,ACANTHURIDAE,Naso,unicornis,Local Use
+ANIMALIA,Chordata,Actinopterygii,,SERRANIDAE,Plectropomus,leopardus,Local Use
+ANIMALIA,Chordata,Actinopterygii,,SCARIDAE,Chlorurus,microrhinos,Local Use
+ANIMALIA,Chordata,Actinopterygii,,SCARIDAE,Scarus,ghobban,Local Use
+ANIMALIA,Chordata,Actinopterygii,,LETHRINIDAE,Lethrinus,nebulosus,Local Use
+PLANTAE,,Magnioliopsida,,EUPHORBIACEAE,Excoecaria,agallocha,Endemic
+PLANTAE,,,,Moraceae,Ficus,lifouensis,Endemic
+PLANTAE,,,,Sapindaceae,Podonephelium,homei,Endemic
+PLANTAE,,,,Boraginaceae,Heliotropium,foertherianum,Local Use
+PLANTAE,,,,Apocynaceae,Cerbera,manghas,Existence value
+PLANTAE,,,,Amaranthaceae,Einadia,nutans,Endemic
+PLANTAE,,,,Cyatheaceae,Cyathea,alata,Endemic
+PLANTAE,,,,Fabaceae,Erythrina,variegata,Historical Value
+PLANTAE,,,,Araceae,Alocasia,macrorrhizos,Historical Value
+PLANTAE,,,,Cucurbitaceae,Luffa,cylindrica,Historical Value
+ANIMALIA,Chordata,Actinopterygii,,CHAETODONTIDAE,Chaetodon,auriga,Indicators
+ANIMALIA,Chordata,Actinopterygii,,CHAETODONTIDAE,Chaetodon,baronessa,Indicators
+ANIMALIA,Chordata,Actinopterygii,,CHAETODONTIDAE,Chaetodon,bennetti,Indicators
+ANIMALIA,Chordata,Actinopterygii,,CHAETODONTIDAE,Chaetodon,citrinellus,Indicators
+ANIMALIA,Chordata,Actinopterygii,,CHAETODONTIDAE,Chaetodon,ephippium,Indicators
+ANIMALIA,Chordata,Actinopterygii,,CHAETODONTIDAE,Chaetodon,flavirostris,Indicators
+ANIMALIA,Chordata,Actinopterygii,,CHAETODONTIDAE,Chaetodon,guentheri,Indicators
+ANIMALIA,Chordata,Actinopterygii,,CHAETODONTIDAE,Chaetodon,kleinii,Indicators
+ANIMALIA,Chordata,Actinopterygii,,CHAETODONTIDAE,Chaetodon,lineolatus,Indicators
+ANIMALIA,Chordata,Actinopterygii,,CHAETODONTIDAE,Chaetodon,lunula,Indicators
+ANIMALIA,Chordata,Actinopterygii,,CHAETODONTIDAE,Chaetodon,lunulatus,Indicators
+ANIMALIA,Chordata,Actinopterygii,,CHAETODONTIDAE,Chaetodon,melannotus,Indicators
+ANIMALIA,Chordata,Actinopterygii,,CHAETODONTIDAE,Chaetodon,mertensii,Indicators
+ANIMALIA,Chordata,Actinopterygii,,CHAETODONTIDAE,Chaetodon,meyeri,Indicators
+ANIMALIA,Chordata,Actinopterygii,,CHAETODONTIDAE,Chaetodon,ornatissimus,Indicators
+ANIMALIA,Chordata,Actinopterygii,,CHAETODONTIDAE,Chaetodon,pelewensis,Indicators
+ANIMALIA,Chordata,Actinopterygii,,CHAETODONTIDAE,Chaetodon,plebeius,Indicators
+ANIMALIA,Chordata,Actinopterygii,,CHAETODONTIDAE,Chaetodon,rafflesii,Indicators
+ANIMALIA,Chordata,Actinopterygii,,CHAETODONTIDAE,Chaetodon,reticulatus,Indicators
+ANIMALIA,Chordata,Actinopterygii,,CHAETODONTIDAE,Chaetodon,semeion,Indicators
+ANIMALIA,Chordata,Actinopterygii,,CHAETODONTIDAE,Chaetodon,speculum,Indicators
+ANIMALIA,Chordata,Actinopterygii,,CHAETODONTIDAE,Chaetodon,trifascialis,Indicators
+ANIMALIA,Chordata,Actinopterygii,,CHAETODONTIDAE,Chaetodon,ulietensis,Indicators
+ANIMALIA,Chordata,Actinopterygii,,CHAETODONTIDAE,Chaetodon,unimaculatus,Indicators
+ANIMALIA,Chordata,Actinopterygii,,CHAETODONTIDAE,Chaetodon,vagabundus,Indicators
+ANIMALIA,Chordata,Actinopterygii,,CHAETODONTIDAE,Heniochus,acuminatus,Indicators
+ANIMALIA,Chordata,Actinopterygii,,CHAETODONTIDAE,Heniochus,chrysostomus,Indicators
+ANIMALIA,Chordata,Actinopterygii,,CHAETODONTIDAE,Heniochus,monoceros,Indicators
+ANIMALIA,Chordata,Actinopterygii,,CHAETODONTIDAE,Heniochus,singularius,Indicators
+ANIMALIA,Chordata,Actinopterygii,,CHAETODONTIDAE,Heniochus,varius,Indicators
