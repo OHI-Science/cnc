@@ -15,23 +15,22 @@ iucn_doc <- read_csv(file.path(dir_spp, 'nc_iucn_spp.csv')) %>%
 add_ico_spp <- read_csv(file.path(dir_spp, 'additional_ico_spp.csv')) %>%
   select(species = `Species`, iucn_status = `Red List status`, year = `Year assessed`)
 
-full_spp <- rbind(iucn_doc, add_ico_spp)
-
-# lookup for weights iucn_status
-w.risk_category <-  c('LC' = 0,
-                    'NT' = 0.2,
-                    'VU' = 0.4,
-                    'EN' = 0.6,
-                    'CR' = 0.8,
-                    'EX' = 1)
-
-# replace LR/cd = NT, LR/nt = NT, LR/lc = LC based on http://www.iucnredlist.org/static/categories_criteria_2_3
-full_spp_data <- full_spp %>%
+# merge raw data frames
+## replace LR/cd = NT, LR/nt = NT, LR/lc = LC based on http://www.iucnredlist.org/static/categories_criteria_2_3
+full_spp_data <- rbind(iucn_doc, add_ico_spp) %>%
   mutate(iucn_status = stringr::str_replace_all(iucn_status, "LR/cd", "NT"),
                         iucn_status = stringr::str_replace_all(iucn_status, "LR/nt", "NT"),
                         iucn_status = stringr::str_replace_all(iucn_status, "LR/lc", "LC"))
 
 write_csv(full_spp_data, file.path(dir_spp, "full_spp_data.csv"))
+
+# lookup for weights iucn_status
+w.risk_category <-  c('LC' = 0,
+                      'NT' = 0.2,
+                      'VU' = 0.4,
+                      'EN' = 0.6,
+                      'CR' = 0.8,
+                      'EX' = 1)
 
 #remove records with IUCN weight DD
 final_spp_data <- filter(full_spp_data, !iucn_status == 'DD') %>%
