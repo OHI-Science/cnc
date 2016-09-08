@@ -1,10 +1,11 @@
-rgn_id,species,year,value,target,ref,target years,catch years
-1,Thunnus alalunga,2013,2.86,sb_sbmsy,SPC,2008-2013,2008-2015
-1,Thunnus albacares,2012,1.22,sb_sbmsy,SPC,2008-2012,2008-2015
-1,Thunnus obesus,2012,0.79,sb_sbmsy,SPC,2008-2012,2008-2015
-1,Xiphias gladius,2012,1.2,sb_sbmsy,2014 atock assessment ISCT for West and Central North Pacific,2008-2012,2008-2015
-1,Kajikia audax,2013,0.39,sb_sbmsy,2015 atock assessment ISCT,2008-2013,2011-2015
-1,Makaira mazara,2010,1.139800193, b_bmsy,global OHI,2005-2010,2011-2015
-1,Istiompax indica,2010,1.283291943, b_bmsy,global OHI,2005-2010,2011-2015
-1,Acanthocybium solandri,2010,1.241061162, b_bmsy,global OHI,2005-2010,2011-2015
-1,Pagrus auratus,2010,1.174537841, b_bmsy,global OHI,2005-2010,2011-2015
+rgn_id,species,year,value,target,ref,target years,catch years,analysis year range
+1,Thunnus alalunga,2013,2.86,sb_sbmsy,SPC,2008-2013,2003-2015,2008-2012
+1,Thunnus albacares,2012,1.22,sb_sbmsy,SPC,2008-2012,2003-2015,2008-2012
+1,Thunnus obesus,2012,0.79,sb_sbmsy,SPC,2008-2012,2003-2015,2008-2012
+1,Xiphias gladius,2012,1.2,sb_sbmsy,2014 atock assessment ISCT for West and Central North Pacific,2008-2012,2008-2015,2008-2012
+1,Kajikia audax,2013,0.39,sb_sbmsy,2015 atock assessment ISCT,2008-2013,2011-2015,2008-2012
+,,,,,,,,
+1,Makaira mazara,2010,1.139800193, b_bmsy,global OHI,2005-2010,2011-2015,
+1,Istiompax indica,2010,1.283291943, b_bmsy,global OHI,2005-2010,2011-2015,
+1,Acanthocybium solandri,2010,1.241061162, b_bmsy,global OHI,2005-2010,2011-2015,
+1,Pagrus auratus,2010,1.174537841, b_bmsy,global OHI,2005-2010,2011-2015,
