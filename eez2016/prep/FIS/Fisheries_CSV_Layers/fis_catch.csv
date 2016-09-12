@@ -1,38 +1,41 @@
-rgn_id,stock,scientific_name,year,tonnes
-1,thon blanc,Thunnus alalunga,2015,1529
-1,thon blanc,Thunnus alalunga,2014,1738
-1,thon blanc,Thunnus alalunga,2013,1565
-1,thon blanc,Thunnus alalunga,2012,1684
-1,thon blanc,Thunnus alalunga,2011,1669
-1,thon blanc,Thunnus alalunga,2010,1939
-1,thon blanc,Thunnus alalunga,2009,1649
-1,thon blanc,Thunnus alalunga,2008,1506
-1,thon jaune,Thunnus albacares,2015,807
-1,thon jaune,Thunnus albacares,2014,705
-1,thon jaune,Thunnus albacares,2013,500
-1,thon jaune,Thunnus albacares,2012,549
-1,thon jaune,Thunnus albacares,2011,596
-1,thon jaune,Thunnus albacares,2010,505
-1,thon jaune,Thunnus albacares,2009,487
-1,thon jaune,Thunnus albacares,2008,426
-1,thon obèse,Thunnus obesus,2015,59
-1,thon obèse,Thunnus obesus,2014,58
-1,thon obèse,Thunnus obesus,2013,57
-1,thon obèse,Thunnus obesus,2012,50
-1,thon obèse,Thunnus obesus,2011,48
-1,thon obèse,Thunnus obesus,2010,44
-1,thon obèse,Thunnus obesus,2009,51
-1,thon obèse,Thunnus obesus,2008,62
-1,espadon,Xiphias gladius,2015,9
-1,espadon,Xiphias gladius,2014,12
-1,espadon,Xiphias gladius,2013,8
-1,espadon,Xiphias gladius,2012,11
-1,espadon,Xiphias gladius,2011,12
-1,espadon,Xiphias gladius,2010,8
-1,espadon,Xiphias gladius,2009,7
-1,espadon,Xiphias gladius,2008,15
-1,marlin rayé,Kajikia audax,2015,53
-1,marlin rayé,Kajikia audax,2014,48
-1,marlin rayé,Kajikia audax,2013,44
-1,marlin rayé,Kajikia audax,2012,58
-1,marlin rayé,Kajikia audax,2011,73
+rgn_id,species,stock,year,tonnes,
+1,thon blanc,Thunnus alalunga,2015,1529,
+1,thon blanc,Thunnus alalunga,2014,1738,
+1,thon blanc,Thunnus alalunga,2013,1565,
+1,thon blanc,Thunnus alalunga,2012,1684,
+1,thon blanc,Thunnus alalunga,2011,1669,
+1,thon blanc,Thunnus alalunga,2010,1939,
+1,thon blanc,Thunnus alalunga,2009,1649,
+1,thon blanc,Thunnus alalunga,2008,1506,
+1,thon jaune,Thunnus albacares,2015,807,
+1,thon jaune,Thunnus albacares,2014,705,
+1,thon jaune,Thunnus albacares,2013,500,
+1,thon jaune,Thunnus albacares,2012,549,
+1,thon jaune,Thunnus albacares,2011,596,
+1,thon jaune,Thunnus albacares,2010,505,
+1,thon jaune,Thunnus albacares,2009,487,
+1,thon jaune,Thunnus albacares,2008,426,
+1,thon obèse,Thunnus obesus,2015,59,
+1,thon obèse,Thunnus obesus,2014,58,
+1,thon obèse,Thunnus obesus,2013,57,
+1,thon obèse,Thunnus obesus,2012,50,
+1,thon obèse,Thunnus obesus,2011,48,
+1,thon obèse,Thunnus obesus,2010,44,
+1,thon obèse,Thunnus obesus,2009,51,
+1,thon obèse,Thunnus obesus,2008,62,
+1,espadon,Xiphias gladius,2015,9,
+1,espadon,Xiphias gladius,2014,12,
+1,espadon,Xiphias gladius,2013,8,
+1,espadon,Xiphias gladius,2012,11,
+1,espadon,Xiphias gladius,2011,12,
+1,espadon,Xiphias gladius,2010,8,
+1,espadon,Xiphias gladius,2009,7,
+1,espadon,Xiphias gladius,2008,15,
+1,marlin rayé,Kajikia audax,2015,53,
+1,marlin rayé,Kajikia audax,2014,48,
+1,marlin rayé,Kajikia audax,2013,44,
+1,marlin rayé,Kajikia audax,2012,58,
+1,marlin rayé,Kajikia audax,2011,73,
+1,marlin rayé,Kajikia audax,2010,55.2,used mean catch to gap fill
+1,marlin rayé,Kajikia audax,2009,55.2,used mean catch to gap fill
+1,marlin rayé,Kajikia audax,2008,55.2,used mean catch to gap fill
