@@ -1,6 +1,6 @@
 targets,layer,filename,fld_value,units,name,description,clip_n_ship_disag,clip_n_ship_disag_description,layer_gl,path_in,fld_id_num,fld_id_chr,fld_category,fld_year,fld_val_num,fld_val_chr,file_exists,year_min,year_max,val_min,val_max,val_0to1,flds_unused,flds_missing,rows_duplicated,num_ids_unique,data_na
-FIS,fish_landings,fis_landings_2016,tonnes,tonnes,Mean annual catch for each stock ,Mean catch per stock in tonnes reported locally in New Caledonia,,,,~/github/ohi-global/eez2016/layers/fis_landings_2016.csv,rgn_id,,stock,year,mean_catch,,TRUE,2011,2015,5,1669,FALSE,,,,,FALSE
-FIS,fis_sbmsy,fis_sbmsy_2016cnc,sbmsy,sb/sbmsy,sb_sbsmsy from formal stock assessments ,The ratio of spawning biomass to the spawner biomass  required to deliver maximum sustainable yield. ,,,,~/github/ohi-global/eez2016/layers/fis_sbmsy_2016cnc.csv,rgn_id,,stock,year,sbsbmsy,,TRUE,2011,2015,0.31,3.2,FALSE,,,,,TRUE
+FIS,fish_landings,fis_landings_2016.csv,tonnes,tonnes,Mean annual catch for each stock ,Mean catch per stock in tonnes reported locally in New Caledonia,,,,~/github/ohi-global/eez2016/layers/fis_landings_2016.csv,rgn_id,,stock,year,mean_catch,,TRUE,2011,2015,5,1669,FALSE,,,,,FALSE
+FIS,fis_sbmsy_2016cnc,fis_sbmsy_2016cnc.csv,sbmsy,sb/sbmsy,sb_sbsmsy from formal stock assessments ,The ratio of spawning biomass to the spawner biomass  required to deliver maximum sustainable yield. ,,,,~/github/ohi-global/eez2016/layers/fis_sbmsy_2016cnc.csv,rgn_id,,stock,year,sbsbmsy,,TRUE,2011,2015,0.31,3.2,FALSE,,,,,FALSE
 AO,ao_access,ao_access_gl2016.csv,value,value,Fisheries management effectiveness and opportunity,"The opportunity for artisanal and recreational fishing based on the quality of management of the small- scale fishing sector (Mora et al 2009).
 
 Data sources:
