@@ -8,6 +8,8 @@ library(stringr) # install.packages('stringr')
 dir_ico <- '~/github/cnc/prep/ICO'
 setwd(dir_ico)
 
+dir_layers <- '~/github/cnc/eez2016/layers'
+
 # read in raw data file
 ico <- read_csv(file.path(dir_ico, 'ico.csv')) %>%
   select(species = Species)
@@ -37,6 +39,8 @@ final_ico_data <- filter(ico_data, !iucn_status == 'DD') %>%
   select(rgn_id, species, iucn_status, year, risk.wt)
 
 write_csv(final_ico_data, file.path(dir_ico, "final_ico_data.csv"))
+write_csv(final_ico_data, file.path(dir_layers, "ico_data_cnc2016_EJP.csv"))
+
 
 ico_status <- final_ico_data %>%
   summarize(status = (1 - mean(risk.wt)) * 100)
