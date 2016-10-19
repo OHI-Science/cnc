@@ -32,12 +32,12 @@ lsp_protection_cat <- data.frame(iucn_cat = c("Cat Ia", "Cat II", "Cat III",
 lsp_with_wt <- left_join(lsp_data, lsp_protection_cat )
 
 #add management plan status weight
-## weights were created by E. Pacheco. Could be potential area for manipulation
+## weights were created by E. Pacheco/M. Imirizaldu. Could be potential area for manipulation
 management_wt <- data.frame(Management = c("Management Plan Implemented", "Management Plan",
                                               "Management Plan in Development", "No plan"
                                               ),
-                         mngmt_values = c(1, 0.5,
-                                         0.25, 0.1) )
+                         mngmt_values = c(1, 0.75,
+                                         0.5, 0.1) )
 
 lsp_w_mngmt <- left_join(lsp_with_wt, management_wt, by = "Management") %>%
   select(rgn_id, Year, km2, iucn_cat, prot_values, Management, mngmt_values) %>%
@@ -45,29 +45,43 @@ lsp_w_mngmt <- left_join(lsp_with_wt, management_wt, by = "Management") %>%
   arrange(Year) %>%
   mutate(km2_cum = round(cumsum(km2), 2))
 
-
 #calculations of status with temporal gapfilling and cummulative protection areas
-lsp_status <- lsp_w_mngmt %>%
+
+lsp_final_data <- lsp_w_mngmt %>%
+  ##protected areas 0.216, 0.226, 0.191, and 0.270 are within 1067.097
+  group_by(Year, prot_values, mngmt_values) %>%
+  summarize(tot_area = sum(km2)) %>%
+  ungroup() %>%
+  mutate(tot_area = ifelse(tot_area == 1067.097, 1067.097-0.442-0.461, tot_area)) %>%
+  # all these are within 1288864.900
+  mutate(tot_area = ifelse(tot_area == 1288864.900, 1288864.900-1066.194, tot_area)) %>%
+  mutate(rel_protection = tot_area * prot_values * mngmt_values)
+
+lsp_status <- lsp_final_data %>%
   group_by(Year) %>% # calculate rel_prot_total by year
   summarise(rel_protection_total = sum(rel_protection)) %>%
-  ungroup %>%
+  ungroup() %>%
   arrange(Year) %>%
   mutate(cum_rel_prot = cumsum(rel_protection_total)) %>%
   complete(Year = 2008:2016) %>%
   fill(cum_rel_prot) %>%
 
   #proposing different reference points
-  ## v1: reference point is total protected area (total cumulative protection in 2016 = 1289932.90) at IUNC category Ia (score = 1) and Management Plan Implemented (score = 1)
-  mutate(ref_point_1 = 1289932.90,
+
+  ##MANAGEMENT: all versions are at Management Plan Implemented = 1
+
+  ## v1: Reference point is 1288864.900 minus the remaining protected areas on the list (total cumulative protection in 2016 = 1287798.706) at IUNC category VI (score = 0.1)
+  mutate(ref_point_1 = 1287798.706 * 0.1 * 1,
          status_1 = round((cum_rel_prot / ref_point_1) * 100, 2)) %>%
-  ## v2: reference point is total protected area (total cumulative protection in 2016 = 1289932.90) at IUCN category V (score = 0.2) and Management Plan Implemented (score = 1)
-  mutate(ref_point_2 = (1289932.90 * 0.2 * 1),
+  ## v2: Reaching 60% of EEZ Protected as Cat II (KBA) = 0.8 & 40% of EEZ Protected as Category VI
+  mutate(ref_point_2 = (((1287798.706 * .6) * 0.8 * 1) + (1287798.706 * .4) * 0.1 * 1),
          status_2 = round((cum_rel_prot / ref_point_2) * 100, 2)) %>%
-  ## v3: reference point is total protected area (total cumulative protection in 2016 = 1289932.90) at IUCN category V (score = 0.2) and Management Plan (score 0.5)
-  mutate(ref_point_3 = (1289932.90 * 0.2 * 0.5),
+  ## v3: Reaching 70% of EZZ as Cat IV, 30% of entire EEZ as Cat I (working group)
+  ### use this model for the final version
+  mutate(ref_point_3 = (((1287798.706 * .7) * 0.4 * 1) + ((1287798.706 * .3) * 1 * 1)),
          status_3 = round((cum_rel_prot / ref_point_3) * 100, 2)) %>%
   mutate(rgn_id = 1) %>%
-  select(rgn_id, Year, cum_rel_prot, ref_point_1, status_1, ref_point_2, status_2, ref_point_3, status_3) %>%
+  select(rgn_id, Year, cum_rel_prot, ref_point_1, status_1, ref_point_2, status_2, ref_point_3, status_3)
   # save file as csv
   write_csv(lsp_status, file.path(dir_lsp, 'lsp_status.csv'))
 
