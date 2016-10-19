@@ -70,6 +70,7 @@ write.csv(B_scores_cnc_gf, file.path(dir_layers ,'fis_sbmsy_2016cnc.csv'), row.n
 write.csv(landings, file.path(dir_layers ,'fis_landings_2016.csv'), row.names=FALSE)
 
 
+##to be transfered into the functions.R file"
 ##laod in the layer data for the scores
 scores_cnc<- read.csv(file.path(dir_layers,
                                 'fis_sbmsy_2016cnc.csv'))

@@ -103,6 +103,8 @@ write.csv(landings, file.path(dir_layers ,'fis_landings_2016.csv'), row.names=FA
 ##########################################################################
 ## STATUS AND TREND CALCULATIONS
 ##########################################################################
+scores = read.csv(file.path(dir_layers, 'fis_sbmsy_2016.csv'))
+landings = read.csv(file.path(dir_layers, 'fis_landings_2016.csv'))
 
 
 ###########################################################################
@@ -239,8 +241,8 @@ write.csv(status_gl_table, file.path(dir_prep ,'status_gl_table.csv'), row.names
 #for global model
 status_gl <- weights %>%
   left_join(scores_gl, by=c('rgn_id', 'year', 'stock')) %>%
-                  # remove missing data
-  select(rgn_id, year, stock, propCatch, score)        # cleaning data
+
+  select(rgn_id, year, stock, propCatch, score)
 
 status_gl <- status_gl %>%
   group_by(rgn_id, year) %>%
@@ -248,16 +250,17 @@ status_gl <- status_gl %>%
   ungroup() %>%
   data.frame()
 
+#final formatting for status from global model
 status_gl <- status_gl %>%
   filter(year == max(year)) %>%
-  mutate(status_gl = round(status_gl * 100, 1)) %>%
-  select(rgn_id, status_gl)
+  mutate(status_cnc = round(status_gl * 100, 1)) %>%
+  select(rgn_id, status_cnc)
 #42.9 for global model using nc data from 2011-2015 but with penaly for underfishing
 
 
 trend_years <- (max(scores_gl$year)-4):max(scores_gl$year)#dont really need since we are only using the recent 5 yrs of data
 
-trend <- status_gl %>%
+trend_gl <- status_gl %>%
   group_by(rgn_id) %>%
   filter(year %in% trend_years) %>%
   do(mdl = lm(status_gl ~ year, data=.)) %>%
@@ -287,7 +290,7 @@ status_cnc <- status_cnc %>%
 ### To get trend, get slope of regression model based on most recent 5 years
 ### of data
 
-trend_years <- (max(status$year)-4):max(status$year)#dont really need since we are only using the recent 5 yrs of data
+trend_years <- (max(status_cnc$year)-4):max(status_cnc$year)#dont really need since we are only using the recent 5 yrs of data
 
 trend_cnc <- status_cnc %>%
   group_by(rgn_id) %>%
@@ -300,19 +303,22 @@ trend_cnc <- status_cnc %>%
 
 ##0 slope so no trend for cnc fis status
 
-### final formatting of status data:
+### final formatting of status data for new caledonia model
 status_cnc <- status_cnc %>%
   filter(year == max(year)) %>%
   mutate(status_cnc = round(status_cnc * 100, 1)) %>%
   select(rgn_id, status_cnc)
 
 
+
 ##### save the data
+#New Caledonia Model
 write.csv(status_cnc, file.path(dir_layers ,'FIS_status_cnc.csv'), row.names=FALSE)
 write.csv(trend_cnc,  file.path(dir_layers ,'FIS_trend_cnc.csv'), row.names = FALSE)
 
-
-
+#Global model for senario testing
+write.csv(status_gl, file.path(dir_layers ,'fis_status_gl.csv'), row.names=FALSE)
+write.csv(trend_gl,  file.path(dir_layers ,'fis_trend_gl.csv'), row.names = FALSE)
 ##############################################
 ## PLOT RESULTS
 library(ggplot2)
