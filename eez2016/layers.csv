@@ -1,6 +1,6 @@
 targets,layer,filename,fld_value,units,name,description,clip_n_ship_disag,clip_n_ship_disag_description,layer_gl,path_in,fld_id_num,fld_id_chr,fld_category,fld_year,fld_val_num,fld_val_chr,file_exists,year_min,year_max,val_min,val_max,val_0to1,flds_unused,flds_missing,rows_duplicated,num_ids_unique,data_na
-FIS,fish_landings,fis_landings_2016,tonnes,,Mean annual catch for each stock ,Mean catch per stock in tonnes reported locally in New Caledonia,,,,~/github/ohi-global/eez2016/layers/fis_landings_2016.csv,rgn_id,,stock,year,mean_catch,,TRUE,2008,2012,7,1939,FALSE,,,,,
-FIS,fis_sbmsy,fis_sbmsy_2016,score,,sb_sbsmsy from formal stock assessments ,The ratio of spawning biomass to the spawner biomass  required to deliver maximum sustainable yield. ,,,,~/github/ohi-global/eez2016/layers/fis_sbmsy.csv,rgn_id,,stock,year,sbsbmsy,,TRUE,2008,2012,0.31,3.2,FALSE,,,,,FALSE
+FIS,fish_landings,fis_landings_2016,tonnes,tonnes,Mean annual catch for each stock ,Mean catch per stock in tonnes reported locally in New Caledonia,,,,~/github/ohi-global/eez2016/layers/fis_landings_2016.csv,rgn_id,,stock,year,mean_catch,,TRUE,2011,2015,5,1669,FALSE,,,,,FALSE
+FIS,fis_sbmsy,fis_sbmsy_2016cnc,sbmsy,sb/sbmsy,sb_sbsmsy from formal stock assessments ,The ratio of spawning biomass to the spawner biomass  required to deliver maximum sustainable yield. ,,,,~/github/ohi-global/eez2016/layers/fis_sbmsy_2016cnc.csv,rgn_id,,stock,year,sbsbmsy,,TRUE,2011,2015,0.31,3.2,FALSE,,,,,TRUE
 AO,ao_access,ao_access_gl2016.csv,value,value,Fisheries management effectiveness and opportunity,"The opportunity for artisanal and recreational fishing based on the quality of management of the small- scale fishing sector (Mora et al 2009).
 
 Data sources:
@@ -32,18 +32,8 @@ Data sources:
 - [World Health Organization and United Nations Children's Fund's Joint Monitoring Programme (WHO/UNICEF's JMP)](http://www.wssinfo.org/data-estimates/table)
 ",equal,global trends were applied equally to all regions.,cw_pathogen_trend,~/github/ohi-global/eez2016/layers/cw_pathogen_trend.csv,rgn_id,,,,trend,,TRUE,,,0,0,TRUE,,,,1,FALSE
 CW,cw_trash_trend,cw_trash_trend_gl2016.csv,trend,trend score,Trends in trash estimated using improperly disposed of plastics,Trend estimated using 2010 data and estimated 2025 data for improperly disposed of trash data.,equal,global trends were applied equally to all regions.,cw_trash_trend,~/github/ohi-global/eez2016/layers/cw_trash_trend.csv,rgn_id,,,,trend,,TRUE,,,0.162429379,0.162429379,TRUE,,,,1,FALSE
-FIS,fis_b_bmsy,fis_b_bmsy_gl2016.csv,bbmsy,B / B_msy,B/Bmsy estimates obtained using RAM data (when available) and the catch-MSY method,"The ratio of fish population abundance compared to the abundance required to deliver maximum sustainable yield, obtained from the catch-MSY model (Martell & Froese, 2013).
-
-Data sources:
-
-- Martell, S., & Froese, R. (2013). **A simple method for estimating MSY from catch and resilience**. _Fish and Fisheries_ 14(4): 504-514. [doi:10.1111/j.1467-2979.2012.00485.x](https://dx/doi/org/10.1111/j.1467-2979.2012.00485.x)
-",,,fis_b_bmsy,~/github/ohi-global/eez2016/layers/fis_b_bmsy.csv,rgn_id,,stock_id,year,bbmsy,,TRUE,2001,2010,0.204571916,3.35,FALSE,,,,1,FALSE
-FIS,fis_meancatch,fis_meancatch_gl2016.csv,mean_catch,metric tons,Catch data for each Taxon/FAO/SAU region averaged across years,"Mean catch-per-taxon values within each Sea Around Us/FAO fishing area.
-
-Data sources:
-
-- [FAO Major Fishing Areas](http://www.fao.org/fishery/area/search/en)
-- [Sea Around Us Project (SAUP)](http://www.seaaroundus.org)",,,fis_meancatch,~/github/ohi-global/eez2016/layers/fis_meancatch.csv,rgn_id,,stock_id_taxonkey,year,mean_catch,,TRUE,2001,2010,1.09E-05,1770.668946,FALSE,,,,1,FALSE
+FIS,fis_status,FIS_status_cnc.csv,status_cnc,fis scores,status score for fis,Sb_sbmsy ratio weighted by annual mean catch ,,,fis_b_bmsy,~/github/ohi-global/eez2016/layers/FIS_status_cnc.csv,rgn_id,,stock_id,year,score,,TRUE,2001,2010,95.2,95.2,FALSE,,,,1,FALSE
+FIS,fis_trend,FIS_trend_cnc.csv,trend_cnc,trend_cnc,Trends in fis scores,trend in fis score,,,fis_meancatch,~/github/ohi-global/eez2016/layers/FIS_trend_cnc.csv,rgn_id,,stock_id_taxonkey,year,trend,,TRUE,2001,2010,0.00E+00,0,FALSE,,,,1,FALSE
 FP,fp_wildcaught_weight,fp_wildcaught_weight_gl2016.csv,w_fis,proportion,Fisheries weighting factor,"Proportion of wild caught fisheries yield to mariculture yield, based on FAO fisheries statistics.
 
 Data sources:
