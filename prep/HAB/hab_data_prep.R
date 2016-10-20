@@ -46,4 +46,4 @@ hab_status <- rbind(coral_status, plant_status) %>%
   summarize(score = mean(status))
 
 write_csv(final_hab_data, file.path(dir_hab, "final_hab_data.csv"))
-write_csv(final_hab_data, file.path(dir_layers, "hab_data_cnc2016_EJP.csv"))
+write_csv(final_hab_data, file.path(dir_layers, "hab_iucn_status_cnc2016_EJP.csv"))

@@ -7,6 +7,8 @@ library(readr) # install.packages('readr')
 dir_spp <- '~/github/cnc/prep/SPP'
 setwd(dir_spp)
 
+dir_layers <- '~/github/cnc/eez2016/layers'
+
 # read in raw data file
 iucn_doc <- read_csv(file.path(dir_spp, 'nc_iucn_spp.csv')) %>%
   select(species = `Species`, iucn_status = `Red List status`, year = `Year assessed`)
@@ -44,6 +46,7 @@ final_spp_data <- filter(full_spp_data, !iucn_status == 'DD') %>%
   select(rgn_id, species, iucn_status, year, risk.wt)
 
 write_csv(final_spp_data, file.path(dir_spp, "final_spp_data.csv"))
+write_csv(final_spp_data, file.path(dir_layers, "spp_iucn_status_cnc2016_EJP.csv"))
 
 spp_status <- final_spp_data %>%
   summarize(status = (1 - mean(risk.wt)) * 100)
