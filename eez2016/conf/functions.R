@@ -6,12 +6,19 @@ Setup = function(){
   write.csv(referencePoints, 'temp/referencePoints.csv', row.names=FALSE)
 }
 
-
+FIS= function(layers, scores){
 ## FIS - Modeled for New Caledonia using two senarios - global (does not incorperate local philosphy of consistent catches of pelagics and uses the global model to penalize underfishing of stocks
 # and New Caledonia model (files_cnc) and does not penalize for underfishing a stock but does penalize for over fishing)#
 #load data
-scores = read.csv(file.path(dir_layers, 'fis_sbmsy_2016.csv'))
-landings = read.csv(file.path(dir_layers, 'fis_landings_2016.csv'))
+  #layers used fis_sbmsy_2016.csv, fis_landings_2016.csv, fis_sbmsy_2016gl.csv, fis_sbmsy_2016cnc.csv, fis_landings_2016.csv, FIS_status_cnc.cvs, fis_status_gl.csv
+  #FIS_trend_cnc.csv, fis_trend_gl.csv
+
+#directories
+  dir_cnc = '~/github/cnc/'
+  dir_cnc_eez = '~/github/cnc/eez2016'
+  dir_layers = file.path(dir_cnc_eez, 'layers')
+  scores = read.csv(file.path(dir_layers, 'fis_sbmsy_2016.csv'))
+  landings = read.csv(file.path(dir_layers, 'fis_landings_2016.csv'))
 
 
 ###########################################################################
@@ -134,7 +141,6 @@ status_cnc_table <- weights %>%
 status_cnc_table<-as.data.frame(status_cnc_table)
 
 
-#write.csv(status_gl_table, file.path(dir_prep ,'status_gl_table.csv'), row.names=FALSE)##not sure why it isnt able to write to directory
 ############################################################
 #####   Join scores and weights to calculate status
 ############################################################
@@ -172,10 +178,6 @@ status_gl <- status_gl %>%
 #42.9 for global model using nc data from 2011-2015 but with penaly for underfishing
 
 
-
-
-
-
 #######for local cnc model###########3
 status_cnc <- weights %>%
   left_join(scores_cnc, by=c('rgn_id', 'year', 'stock')) %>%
@@ -190,7 +192,7 @@ status_cnc <- status_cnc %>%
   ungroup() %>%
   data.frame()
 
-##cnc fisheries score is 95.2
+
 
 ### To get trend, get slope of regression model based on most recent 5 years
 ### of data
@@ -206,6 +208,7 @@ trend_cnc <- status_cnc %>%
   ungroup() %>%
   mutate(trend = round(trend, 2))
 
+trend_cnc<-as.data.frame(trend_cnc)
 ##0 slope so no trend for cnc fis status
 
 ### final formatting of status data for new caledonia model
@@ -213,7 +216,7 @@ status_cnc <- status_cnc %>%
   filter(year == max(year)) %>%
   mutate(status_cnc = round(status_cnc * 100, 1)) %>%
   select(rgn_id, status_cnc)
-
+##cnc fisheries score is 95.2
 
 
 ##### save the data
@@ -228,22 +231,39 @@ write.csv(trend_gl,  file.path(dir_layers ,'fis_trend_gl.csv'), row.names = FALS
 # assemble dimensions
 #new one for each senario
 
+##NEED TO CHOOSE ONE OF THE SENARIOS BELOW AND COMMENT OUT THE OTHER DEPENDING ON WHAT MODEL/SENARIO YOU WANT TO USE (GLOBAL OR NEW CALEDONIA)
 #global senario - penalizes underfishing
-scores <- rbind(status_gl, trend_gl) %>%
-  mutate(goal='FIS') %>%
-  filter(region_id != 255)
-  scores <- data.frame(scores)
 
-  return(scores)
+#scores <- rbind(status_gl, trend_gl) %>%
+#  mutate(goal='FIS') %>%
+#  filter(region_id != 255)
+#  scores <- data.frame(scores)
+
+ # return(scores)
+
 
 #New Caledonia senario -  only penalizes over-fishing
   scores <- rbind(status_cnc, trend_cnc) %>%
     mutate(goal='FIS') %>%
-    filter(region_id != 255)
+    filter(rgn_id)
   scores <- data.frame(scores)
 
   return(scores)
 
+
+  scores = status_cnc %>%
+    select(region_id = rgn_id,
+           score     = status_cnc) %>%
+    mutate(dimension='status') %>%
+    rbind(
+      trend %>%
+        select(region_id = rgn_id,
+               score     = trend_cnc) %>%
+        mutate(dimension = 'trend')) %>%
+    mutate(goal='FIS')
+
+
+}
 ######end of fis code
 
 MAR = function(layers, status_year){
