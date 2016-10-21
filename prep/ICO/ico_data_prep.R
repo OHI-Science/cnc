@@ -39,8 +39,7 @@ final_ico_data <- filter(ico_data, !iucn_status == 'DD') %>%
   select(rgn_id, species, iucn_status, year, risk.wt)
 
 write_csv(final_ico_data, file.path(dir_ico, "final_ico_data.csv"))
-write_csv(final_ico_data, file.path(dir_layers, "ico_data_cnc2016_EJP.csv"))
-
+write_csv(final_ico_data, file.path(dir_layers, "ico_iucn_status_cnc2016_EJP.csv"))
 
 ico_status <- final_ico_data %>%
   summarize(status = (1 - mean(risk.wt)) * 100)

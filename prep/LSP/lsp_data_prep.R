@@ -7,6 +7,8 @@ library(readr) # install.packages('readr')
 dir_lsp <- '~/github/cnc/prep/LSP'
 setwd(dir_lsp)
 
+dir_layers <- '~/github/cnc/eez2016/layers'
+
 # read in raw data file
 file <- read_csv(file.path(dir_lsp, 'LSP_2016_updated.csv'))
 
@@ -44,6 +46,8 @@ lsp_w_mngmt <- left_join(lsp_with_wt, management_wt, by = "Management") %>%
   mutate(rel_protection = km2 * prot_values * mngmt_values) %>%
   arrange(Year) %>%
   mutate(km2_cum = round(cumsum(km2), 2))
+
+write_csv(lsp_w_mngmt, file.path(dir_layers, "lsp_iucn_mngmt_cnc2016_EJP.csv"))
 
 #calculations of status with temporal gapfilling and cummulative protection areas
 

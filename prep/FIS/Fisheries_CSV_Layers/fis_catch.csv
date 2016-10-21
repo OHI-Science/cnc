@@ -1,41 +1,76 @@
-rgn_id,species,stock,year,tonnes,
-1,thon blanc,Thunnus alalunga,2015,1529,
-1,thon blanc,Thunnus alalunga,2014,1738,
-1,thon blanc,Thunnus alalunga,2013,1565,
-1,thon blanc,Thunnus alalunga,2012,1684,
-1,thon blanc,Thunnus alalunga,2011,1669,
-1,thon blanc,Thunnus alalunga,2010,1939,
-1,thon blanc,Thunnus alalunga,2009,1649,
-1,thon blanc,Thunnus alalunga,2008,1506,
-1,thon jaune,Thunnus albacares,2015,807,
-1,thon jaune,Thunnus albacares,2014,705,
-1,thon jaune,Thunnus albacares,2013,500,
-1,thon jaune,Thunnus albacares,2012,549,
-1,thon jaune,Thunnus albacares,2011,596,
-1,thon jaune,Thunnus albacares,2010,505,
-1,thon jaune,Thunnus albacares,2009,487,
-1,thon jaune,Thunnus albacares,2008,426,
-1,thon obèse,Thunnus obesus,2015,59,
-1,thon obèse,Thunnus obesus,2014,58,
-1,thon obèse,Thunnus obesus,2013,57,
-1,thon obèse,Thunnus obesus,2012,50,
-1,thon obèse,Thunnus obesus,2011,48,
-1,thon obèse,Thunnus obesus,2010,44,
-1,thon obèse,Thunnus obesus,2009,51,
-1,thon obèse,Thunnus obesus,2008,62,
-1,espadon,Xiphias gladius,2015,9,
-1,espadon,Xiphias gladius,2014,12,
-1,espadon,Xiphias gladius,2013,8,
-1,espadon,Xiphias gladius,2012,11,
-1,espadon,Xiphias gladius,2011,12,
-1,espadon,Xiphias gladius,2010,8,
-1,espadon,Xiphias gladius,2009,7,
-1,espadon,Xiphias gladius,2008,15,
-1,marlin rayé,Kajikia audax,2015,53,
-1,marlin rayé,Kajikia audax,2014,48,
-1,marlin rayé,Kajikia audax,2013,44,
-1,marlin rayé,Kajikia audax,2012,58,
-1,marlin rayé,Kajikia audax,2011,73,
-1,marlin rayé,Kajikia audax,2010,55.2,used mean catch to gap fill
-1,marlin rayé,Kajikia audax,2009,55.2,used mean catch to gap fill
-1,marlin rayé,Kajikia audax,2008,55.2,used mean catch to gap fill
+rgn_id,species,stock,year,tonnes
+1,thon blanc,Thunnus alalunga,2015,1529
+1,thon blanc,Thunnus alalunga,2014,1738
+1,thon blanc,Thunnus alalunga,2013,1565
+1,thon blanc,Thunnus alalunga,2012,1684
+1,thon blanc,Thunnus alalunga,2011,1669
+1,thon blanc,Thunnus alalunga,2010,1939
+1,thon blanc,Thunnus alalunga,2009,1649
+1,thon blanc,Thunnus alalunga,2008,1506
+1,thon jaune,Thunnus albacares,2015,807
+1,thon jaune,Thunnus albacares,2014,705
+1,thon jaune,Thunnus albacares,2013,500
+1,thon jaune,Thunnus albacares,2012,549
+1,thon jaune,Thunnus albacares,2011,596
+1,thon jaune,Thunnus albacares,2010,505
+1,thon jaune,Thunnus albacares,2009,487
+1,thon jaune,Thunnus albacares,2008,426
+1,thon obèse,Thunnus obesus,2015,59
+1,thon obèse,Thunnus obesus,2014,58
+1,thon obèse,Thunnus obesus,2013,57
+1,thon obèse,Thunnus obesus,2012,50
+1,thon obèse,Thunnus obesus,2011,48
+1,thon obèse,Thunnus obesus,2010,44
+1,thon obèse,Thunnus obesus,2009,51
+1,thon obèse,Thunnus obesus,2008,62
+1,espadon,Xiphias gladius,2015,9
+1,espadon,Xiphias gladius,2014,12
+1,espadon,Xiphias gladius,2013,8
+1,espadon,Xiphias gladius,2012,11
+1,espadon,Xiphias gladius,2011,12
+1,espadon,Xiphias gladius,2010,8
+1,espadon,Xiphias gladius,2009,7
+1,espadon,Xiphias gladius,2008,15
+1,marlin rayé,Kajikia audax,2015,53
+1,marlin rayé,Kajikia audax,2014,48
+1,marlin rayé,Kajikia audax,2013,44
+1,marlin rayé,Kajikia audax,2012,58
+1,marlin rayé,Kajikia audax,2011,73
+1,marlin rayé,Kajikia audax,2010,55.2
+1,marlin rayé,Kajikia audax,2009,55.2
+1,marlin rayé,Kajikia audax,2008,55.2
+1,blue marlin,Makaira mazara,2015,21
+1,blue marlin,Makaira mazara,2014,41
+1,blue marlin,Makaira mazara,2013,17
+1,blue marlin,Makaira mazara,2012,16
+1,blue marlin,Makaira mazara,2011,27
+1,black marlin,Istiompax indica,2015,32
+1,black marlin,Istiompax indica,2014,35
+1,black marlin,Istiompax indica,2013,35
+1,black marlin,Istiompax indica,2012,43
+1,black marlin,Istiompax indica,2011,48
+1,wahoo,Acanthocybium solandri,2015,24
+1,wahoo,Acanthocybium solandri,2014,41
+1,wahoo,Acanthocybium solandri,2013,36
+1,wahoo,Acanthocybium solandri,2012,35
+1,wahoo,Acanthocybium solandri,2011,51
+1,opah,Lampris guttatus,2015,53
+1,opah,Lampris guttatus,2014,99
+1,opah,Lampris guttatus,2013,79
+1,opah,Lampris guttatus,2012,75
+1,opah,Lampris guttatus,2011,73
+1,mahi,Coryphaena hippurus,2015,98
+1,mahi,Coryphaena hippurus,2014,150
+1,mahi,Coryphaena hippurus,2013,91
+1,mahi,Coryphaena hippurus,2012,95
+1,mahi,Coryphaena hippurus,2011,117
+1,sailfish,Istiophorus platypterus,2015,6
+1,sailfish,Istiophorus platypterus,2014,6
+1,sailfish,Istiophorus platypterus,2013,5
+1,sailfish,Istiophorus platypterus,2012,5
+1,sailfish,Istiophorus platypterus,2011,7
+1,spearfish (marlin),Tetrapturus angustirostris,2015,11
+1,spearfish (marlin),Tetrapturus angustirostris,2014,15
+1,spearfish (marlin),Tetrapturus angustirostris,2013,13
+1,spearfish (marlin),Tetrapturus angustirostris,2012,9
+1,spearfish (marlin),Tetrapturus angustirostris,2011,13

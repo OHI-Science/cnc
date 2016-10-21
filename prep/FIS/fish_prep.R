@@ -96,3 +96,18 @@ write.csv(scores, file.path(dir_layers ,'fis_sbmsy_2016.csv'), row.names=FALSE)
 write.csv(landings, file.path(dir_layers ,'fis_landings_2016.csv'), row.names=FALSE)
 
 
+####pressures and resilience layer prep for fis
+#load data
+bycatch<-read.csv(file.path(dir_fis,
+                            'fp_bycatch.csv'))
+
+
+bycatch %>% group_by(Year) %>% summarize(avg.wt=mean(AVG.WT)) # get average weight of bycatch per year
+
+#lowest year is 2015, this will be our reference point (9.125151)
+
+bycatch<-bycatch[-c(6), ]
+
+bycatch<-bycatch %>%
+  mutate(ave.wt=(9.125151)/mean) # the lowest bycatch year is the reference point
+
