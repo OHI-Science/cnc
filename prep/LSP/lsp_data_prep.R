@@ -42,9 +42,9 @@ management_wt <- data.frame(Management = c("Management Plan Implemented", "Manag
                                          0.5, 0.1) )
 
 lsp_w_mngmt <- left_join(lsp_with_wt, management_wt, by = "Management") %>%
-  select(rgn_id, Year, km2, iucn_cat, prot_values, Management, mngmt_values) %>%
+  select(rgn_id, year = Year, km2, iucn_cat, prot_values, management = Management, mngmt_values) %>%
   mutate(rel_protection = km2 * prot_values * mngmt_values) %>%
-  arrange(Year) %>%
+  arrange(year) %>%
   mutate(km2_cum = round(cumsum(km2), 2))
 
 write_csv(lsp_w_mngmt, file.path(dir_layers, "lsp_iucn_mngmt_cnc2016_EJP.csv"))

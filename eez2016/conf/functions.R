@@ -1,3 +1,6 @@
+FIS = function(layers){
+
+
 Setup = function(){
   if(file.exists('eez2013/temp/referencePoints.csv')){file.remove('temp/referencePoints.csv')}
   referencePoints <- data.frame(goal=as.character(),
@@ -10,8 +13,12 @@ Setup = function(){
 ## FIS - Modeled for New Caledonia using two senarios - global (does not incorperate local philosphy of consistent catches of pelagics and uses the global model to penalize underfishing of stocks
 # and New Caledonia model (files_cnc) and does not penalize for underfishing a stock but does penalize for over fishing)#
 #load data
-scores = read.csv(file.path(dir_layers, 'fis_sbmsy_2016.csv'))
-landings = read.csv(file.path(dir_layers, 'fis_landings_2016.csv'))
+
+# EVA: w
+# scores = read.csv(file.path(dir_layers, 'fis_sbmsy_2016.csv'))
+# landings = read.csv(file.path(dir_layers, 'fis_landings_2016.csv'))
+
+scores
 
 
 ###########################################################################
@@ -245,6 +252,10 @@ scores <- rbind(status_gl, trend_gl) %>%
   return(scores)
 
 ######end of fis code
+
+
+}
+
 
 MAR = function(layers, status_year){
 
@@ -1400,29 +1411,45 @@ LE = function(scores, layers){
 }
 
 
-ICO = function(layers, status_year){
+ICO = function(layers){
 
-  layers_data = SelectLayersData(layers, layers=c('ico_spp_iucn_status'))
+  ico_data <- SelectLayersData(layers, layers = 'ico_iucn_status'); head(ico_data)
+  ico_data <- select(ico_data, species = category, iucn_status, year, risk.wt = val_num)
 
-  rk <- layers_data %>%
-    select(region_id = id_num, sciname = category, iucn_cat=val_chr, year, layer) %>%
-    mutate(iucn_cat = as.character(iucn_cat))
+  ico_status <- ico_data %>%
+    group_by(species) %>%
+    filter(year == max(year)) %>%
+    ungroup %>%
+    summarize(score = (1 - mean(risk.wt)) * 100) %>%
+    mutate(dimension = 'status')
 
-  # lookup for weights status
-  #  LC <- "LOWER RISK/LEAST CONCERN (LR/LC)"
-  #  NT <- "LOWER RISK/NEAR THREATENED (LR/NT)"
-  #  T  <- "THREATENED (T)" treat as "EN"
-  #  VU <- "VULNERABLE (V)"
-  #  EN <- "ENDANGERED (E)"
-  #  LR/CD <- "LOWER RISK/CONSERVATION DEPENDENT (LR/CD)" treat as between VU and NT
-  #  CR <- "VERY RARE AND BELIEVED TO BE DECREASING IN NUMBERS"
-  #  DD <- "INSUFFICIENTLY KNOWN (K)"
-  #  DD <- "INDETERMINATE (I)"
-  #  DD <- "STATUS INADEQUATELY KNOWN-SURVEY REQUIRED OR DATA SOUGHT"
-  w.risk_category = data.frame(iucn_cat = c('LC', 'NT', 'CD', 'VU', 'EN', 'CR', 'EX', 'DD'),
-                               risk_score = c(0,  0.2,  0.3,  0.4,  0.6,  0.8,  1, NA)) %>%
-                    mutate(status_score = 1-risk_score) %>%
-    mutate(iucn_cat = as.character(iucn_cat))
+  # calculate trend
+  ico_trend <- ico_data %>%
+    group_by(species) %>%
+    filter(year %in% 2012:2016) %>%
+
+    do(mod = lm(score ~ year, data =.)) %>%
+    mutate(rgn_id = "1",
+           score     =  max(min(coef(mod)[['year']] * 0.05, 1), -1),
+           dimension = 'trend') %>%
+    select(-mod)
+
+
+  # # lookup for weights status
+  # #  LC <- "LOWER RISK/LEAST CONCERN (LR/LC)"
+  # #  NT <- "LOWER RISK/NEAR THREATENED (LR/NT)"
+  # #  T  <- "THREATENED (T)" treat as "EN"
+  # #  VU <- "VULNERABLE (V)"
+  # #  EN <- "ENDANGERED (E)"
+  # #  LR/CD <- "LOWER RISK/CONSERVATION DEPENDENT (LR/CD)" treat as between VU and NT
+  # #  CR <- "VERY RARE AND BELIEVED TO BE DECREASING IN NUMBERS"
+  # #  DD <- "INSUFFICIENTLY KNOWN (K)"
+  # #  DD <- "INDETERMINATE (I)"
+  # #  DD <- "STATUS INADEQUATELY KNOWN-SURVEY REQUIRED OR DATA SOUGHT"
+  # w.risk_category = data.frame(iucn_cat = c('LC', 'NT', 'CD', 'VU', 'EN', 'CR', 'EX', 'DD'),
+  #                              risk_score = c(0,  0.2,  0.3,  0.4,  0.6,  0.8,  1, NA)) %>%
+  #                   mutate(status_score = 1-risk_score) %>%
+  #   mutate(iucn_cat = as.character(iucn_cat))
 
   ####### status
   # STEP 1: take mean of subpopulation scores
@@ -1473,80 +1500,85 @@ ICO = function(layers, status_year){
 
 }
 
-LSP = function(layers, ref_pct_cmpa=30, ref_pct_cp=30, status_year){
+LSP = function(layers){
 
-  trend_years = (status_year-4):status_year
+  #select data ----
+    lsp_data <- SelectLayersData(layers, layers='lsp_iucn_mngmt'); head(lsp_data)  #total offshore/EEZ areas
+    lsp_data <- select(lsp_data, rgn_id = id_num, year, km2 = category, iucn_cat, prot_values, management, mngmt_values, rel_protection = val_num, km2_cum)
 
-  # select data ----
-  r = SelectLayersData(layers, layers=c('rgn_area_inland1km', 'rgn_area_offshore3nm'))  #total offshore/inland areas
-  ry = SelectLayersData(layers, layers=c('lsp_prot_area_offshore3nm', 'lsp_prot_area_inland1km')) #total protected areas
+    #calculations of status with temporal gapfilling and cummulative protection areas
+    lsp_final_data <- lsp_data %>%
+      ##protected areas 0.216, 0.226, 0.191, and 0.270 are within 1067.097
+      group_by(year, prot_values, mngmt_values) %>%
+      summarize(tot_area = sum(km2)) %>%
+      ungroup() %>%
+      mutate(tot_area = ifelse(tot_area == 1067.097, 1067.097-0.442-0.461, tot_area)) %>%
+      # all these are within 1288864.900
+      mutate(tot_area = ifelse(tot_area == 1288864.900, 1288864.900-1066.194, tot_area)) %>%
+      mutate(rel_protection = tot_area * prot_values * mngmt_values)
 
-  r <- r %>%
-    select(region_id = id_num, val_num, layer) %>%
-    spread(layer, val_num) %>%
-    select(region_id, area_inland1km = rgn_area_inland1km,
-           area_offshore3nm = rgn_area_offshore3nm)
+    lsp_status_allyear <- lsp_final_data %>%
+      group_by(year) %>% # calculate rel_prot_total by year
+      summarise(rel_protection_total = sum(rel_protection)) %>%
+      ungroup() %>%
+      arrange(year) %>%
+      mutate(cum_rel_prot = cumsum(rel_protection_total)) %>%
+      complete(year = 2008:2016) %>%
+      fill(cum_rel_prot) %>%
+      ## Reference point: Reaching 70% of EZZ as Cat IV, 30% of entire EEZ as Cat I (working group)
+      ### use this model for the final version
+      mutate(ref_point = (((1287798.706 * .7) * 0.4 * 1) + ((1287798.706 * .3) * 1 * 1)),
+             status = round((cum_rel_prot / ref_point) * 100, 2)) %>%
+      select(year, score = status)
 
-  ry <- ry %>%
-    select(region_id = id_num, year, val_num, layer) %>%
-    spread(layer, val_num) %>%
-    select(region_id, year, cmpa = lsp_prot_area_offshore3nm,
-           cp = lsp_prot_area_inland1km)
+    #proposing different reference points
+    ##MANAGEMENT: all versions are at Management Plan Implemented = 1
 
-  # fill in time series for all regions
+    # ## v1: Reference point is 1288864.900 minus the remaining protected areas on the list (total cumulative protection in 2016 = 1287798.706) at IUNC category VI (score = 0.1)
+    # mutate(ref_point_1 = 1287798.706 * 0.1 * 1,
+    #        status_1 = round((cum_rel_prot / ref_point_1) * 100, 2)) %>%
+    # ## v2: Reaching 60% of EEZ Protected as Cat II (KBA) = 0.8 & 40% of EEZ Protected as Category VI
+    # mutate(ref_point_2 = (((1287798.706 * .6) * 0.8 * 1) + (1287798.706 * .4) * 0.1 * 1),
+    #        status_2 = round((cum_rel_prot / ref_point_2) * 100, 2))
 
-r.yrs <- expand.grid(region_id = unique(ry$region_id),
-                         year = unique(ry$year)) %>%
-  left_join(ry, by=c('region_id', 'year')) %>%
-  arrange(region_id, year) %>%
-  mutate(cp= ifelse(is.na(cp), 0, cp),
-         cmpa = ifelse(is.na(cmpa), 0, cmpa)) %>%
- mutate(pa     = cp + cmpa)
+    lsp_status <- lsp_status_allyear %>%
+      filter(year == max(year)) %>%
+      mutate(rgn_id = 1,
+             dimension = 'status') %>%
+      select(rgn_id, score, dimension)
 
-  # get percent of total area that is protected for inland1km (cp) and offshore3nm (cmpa) per year
-  # and calculate status score
-r.yrs = r.yrs %>%
-  full_join(r, by="region_id") %>%
-  mutate(pct_cp    = pmin(cp   / area_inland1km   * 100, 100),
-         pct_cmpa  = pmin(cmpa / area_offshore3nm * 100, 100),
-         prop_protected    = ( pmin(pct_cp / ref_pct_cp, 1) + pmin(pct_cmpa / ref_pct_cmpa, 1) ) / 2) %>%
-  filter(!is.na(prop_protected))
+    # calculate trend
+    lsp_trend <- lsp_status_allyear %>%
+      filter(year %in% 2012:2016) %>%
+      do(mod = lm(score ~ year, data =.)) %>%
+      mutate(rgn_id = "1",
+             score     =  max(min(coef(mod)[['year']] * 0.05, 1), -1),
+             dimension = 'trend') %>%
+      select(-mod)
 
-# extract status based on specified year
-  r.status = r.yrs %>%
-    filter(year==status_year) %>%
-    select(region_id, status=prop_protected) %>%
-    mutate(status=status*100)
+    #alternative trends for reference point v1 and v2
+    # ## v1: Trend status_1
+    # lsp_trend_1 <- lsp_status_allyear %>%
+    #   filter(year %in% 2012:2016) %>%
+    #   do(mod = lm(status_1 ~ year, data = .)) %>%
+    # mutate(rgn_id = "1",
+    #        score     =  max(min(coef(.$mod)[['year']] * 0.05, 1), -1),
+    #        dimension = 'trend')
 
-  # calculate trend
-  r.trend =   r.yrs %>%
-    filter(year %in% trend_years) %>%
-    group_by(region_id) %>%
-    do(mdl = lm(prop_protected ~ year, data=.)) %>%
-    summarize(
-      region_id = region_id,
-      trend = min(1, max(0, 5*coef(mdl)['year']))) %>% # set boundaries so trend does not go below 0 or above 1
-    ungroup()
+    # ## v2: Trend status_2
+    # lsp_trend_2 <- lsp_status_allyear %>%
+    #   filter(year %in% 2012:2016) %>%
+    #   do(mod = lm(status_2 ~ Year, data = .)) %>%
+    # mutate(rgn_id = "1",
+    #        score     =  max(min(coef(.$mod)[['year']] * 0.05, 1), -1),
+    #        dimension = 'trend')
 
-  ## reference points
-  rp <- read.csv('temp/referencePoints.csv', stringsAsFactors=FALSE) %>%
-    rbind(data.frame(goal = "LSP", method = paste0(ref_pct_cmpa, "% marine protected area; ",
-                                                   ref_pct_cp, "% coastal protected area"),
-                     reference_point = "varies by area of region's eez and 1 km inland"))
-  write.csv(rp, 'temp/referencePoints.csv', row.names=FALSE)
+    scores_LSP <- rbind(lsp_status, lsp_trend) %>%
+      mutate(goal = "LSP") %>%
+      select(region_id = rgn_id, goal, dimension, score)
 
-
-  # return scores
-  scores = bind_rows(
-    within(r.status, {
-      goal      = 'LSP'
-      dimension = 'status'
-      score     = status}),
-    within(r.trend, {
-      goal      = 'LSP'
-      dimension = 'trend'
-      score     = trend}))
-  return(scores[,c('region_id','goal','dimension','score')])
+    # return scores
+    return(scores_LSP)
 }
 
 SP = function(scores){

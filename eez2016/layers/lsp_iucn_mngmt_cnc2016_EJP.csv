@@ -1,4 +1,4 @@
-rgn_id,Year,km2,iucn_cat,prot_values,Management,mngmt_values,rel_protection,km2_cum
+rgn_id,year,km2,iucn_cat,prot_values,management,mngmt_values,rel_protection,km2_cum
 1,2008,0.216,Cat Ia,1,Management Plan Implemented,1,0.216,0.22
 1,2008,0.226,Cat Ia,1,Management Plan Implemented,1,0.226,0.44
 1,2008,0.191,Cat IV,0.4,Management Plan Implemented,1,0.0764,0.63

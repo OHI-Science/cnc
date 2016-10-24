@@ -32,11 +32,7 @@ final_ico_data <- filter(ico_data, !iucn_status == 'DD') %>%
   #Merge w.risk_category with iucn_status
   mutate(risk.wt = w.risk_category[iucn_status]) %>%
   filter(year %in% 2006:2016) %>% ##only selected the past 10 years for biodiversity status -- this could be changed
-  group_by(species) %>%
-  filter(year == max(year)) %>%
-  ungroup %>%
-  mutate(rgn_id = 1) %>%
-  select(rgn_id, species, iucn_status, year, risk.wt)
+  select(species, iucn_status, year, risk.wt)
 
 write_csv(final_ico_data, file.path(dir_ico, "final_ico_data.csv"))
 write_csv(final_ico_data, file.path(dir_layers, "ico_iucn_status_cnc2016_EJP.csv"))
