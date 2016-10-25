@@ -274,6 +274,10 @@ FIS= function(layers){
 ######end of fis code
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> a2c1780553dd896cc160d484e43b78537a63dd4e
 
 MAR = function(layers, status_year){
 
@@ -1439,19 +1443,31 @@ ICO = function(layers){
     filter(year == max(year)) %>%
     ungroup %>%
     summarize(score = (1 - mean(risk.wt)) * 100) %>%
-    mutate(dimension = 'status')
+    mutate(dimension = 'status',
+           rgn_id = 1) %>%
+    select(rgn_id, score, dimension)
 
-  # calculate trend
+  # Trend calculations
+  ## find species with multiple years of assessment
+
+  dup_species <- ico_data$species[duplicated(ico_data[,1:2])]
+
   ico_trend <- ico_data %>%
+    filter(species %in% dup_species) %>%
+    select(-iucn_status) %>%
     group_by(species) %>%
-    filter(year %in% 2012:2016) %>%
-
-    do(mod = lm(score ~ year, data =.)) %>%
-    mutate(rgn_id = "1",
-           score     =  max(min(coef(mod)[['year']] * 0.05, 1), -1),
+    filter(year == max(year) | year == min(year),
+           !(species == "minor" & year == 2014 & risk.wt == "0")) %>%
+    arrange(year) %>%
+    mutate(year = ifelse(year == max(year), "max_year", "min_year")) %>%
+    spread(year, risk.wt) %>%
+    summarize(trend_species = ifelse(max_year > min_year, -0.5,
+                                     ifelse(max_year < min_year, 0.5,
+                                            0))) %>%
+    summarize(score = mean(trend_species)) %>%
+    mutate(rgn_id = 1,
            dimension = 'trend') %>%
-    select(-mod)
-
+    select(rgn_id, score, dimension)
 
   # # lookup for weights status
   # #  LC <- "LOWER RISK/LEAST CONCERN (LR/LC)"
@@ -1464,57 +1480,14 @@ ICO = function(layers){
   # #  DD <- "INSUFFICIENTLY KNOWN (K)"
   # #  DD <- "INDETERMINATE (I)"
   # #  DD <- "STATUS INADEQUATELY KNOWN-SURVEY REQUIRED OR DATA SOUGHT"
-  # w.risk_category = data.frame(iucn_cat = c('LC', 'NT', 'CD', 'VU', 'EN', 'CR', 'EX', 'DD'),
-  #                              risk_score = c(0,  0.2,  0.3,  0.4,  0.6,  0.8,  1, NA)) %>%
-  #                   mutate(status_score = 1-risk_score) %>%
-  #   mutate(iucn_cat = as.character(iucn_cat))
-
-  ####### status
-  # STEP 1: take mean of subpopulation scores
-  r.status_spp <- rk %>%
-    left_join(w.risk_category, by = 'iucn_cat') %>%
-    group_by(region_id, sciname, year) %>%
-    summarize(spp_mean = mean(status_score, na.rm=TRUE)) %>%
-    ungroup()
-
-  # STEP 2: take mean of populations within regions
-  r.status <- r.status_spp %>%
-    group_by(region_id, year) %>%
-    summarize(score = mean(spp_mean, na.rm=TRUE)) %>%
-    ungroup()
-
-  ####### trend
-  trend_years <- c(status_year:(status_year - 9)) # trend based on 10 years of data, due to infrequency of IUCN assessments
-  r.trend <- r.status %>%
-    filter(year %in% trend_years) %>%
-    group_by(region_id) %>%
-    do(mdl = lm(score ~ year, data=.)) %>%
-    summarize(region_id = region_id,
-              score = coef(mdl)['year'] * 5) %>%
-    ungroup() %>%
-    mutate(dimension = "trend")
-
-  ####### status
-  r.status <- r.status %>%
-    filter(year == status_year) %>%
-    mutate(score = score * 100) %>%
-    mutate(dimension = "status") %>%
-    select(region_id, score, dimension)
-
-  ## reference points
-  rp <- read.csv('temp/referencePoints.csv', stringsAsFactors=FALSE) %>%
-    rbind(data.frame(goal = "ICO", method = "scaled IUCN risk categories",
-                     reference_point = NA))
-  write.csv(rp, 'temp/referencePoints.csv', row.names=FALSE)
-
 
   # return scores
-  scores <-  rbind(r.status, r.trend) %>%
-    mutate('goal'='ICO') %>%
-    select(goal, dimension, region_id, score) %>%
-    data.frame()
+  scores_ICO <- rbind(ico_status, ico_trend) %>%
+    mutate(goal = "ICO") %>%
+    select(region_id = rgn_id, goal, dimension, score)
 
-  return(scores)
+  # return scores
+  return(scores_ICO)
 
 }
 
@@ -1674,62 +1647,53 @@ CW = function(layers){
 
 HAB = function(layers){
 
-  ## get the data:
-  health <-  layers$data[['hab_health']] %>%
-    select(rgn_id, habitat, health) %>%
-    mutate(habitat = as.character(habitat))
+  hab_data <- SelectLayersData(layers, layers = 'hab_iucn_status'); head(hab_data)
+  hab_data <- select(hab_data, kingdom = category, species, year, risk.wt = val_num)
 
-  trend <-  layers$data[['hab_trend']] %>%
-    select(rgn_id, habitat, trend) %>%
-    mutate(habitat = as.character(habitat))
+  # # lookup for weights status
+  # #  LC <- "LOWER RISK/LEAST CONCERN (LR/LC)"
+  # #  NT <- "LOWER RISK/NEAR THREATENED (LR/NT)"
+  # #  T  <- "THREATENED (T)" treat as "EN"
+  # #  VU <- "VULNERABLE (V)"
+  # #  EN <- "ENDANGERED (E)"
+  # #  LR/CD <- "LOWER RISK/CONSERVATION DEPENDENT (LR/CD)" treat as between VU and NT
+  # #  CR <- "VERY RARE AND BELIEVED TO BE DECREASING IN NUMBERS"
+  # #  DD <- "INSUFFICIENTLY KNOWN (K)"
+  # #  DD <- "INDETERMINATE (I)"
+  # #  DD <- "STATUS INADEQUATELY KNOWN-SURVEY REQUIRED OR DATA SOUGHT"
 
-  extent <- layers$data[['hab_extent']] %>%
-    select(rgn_id, habitat, extent=km2) %>%
-    mutate(habitat = as.character(habitat))
+  #calculate status for coral habitats
+  coral_status <- filter(hab_data, kingdom == 'ANIMALIA') %>%
+    group_by(species) %>%
+    filter(year == max(year)) %>%
+    ungroup %>%
+    summarize(score = (1 - mean(risk.wt)) * 100)
 
-  # join and limit to HAB habitats
-  d <- health %>%
-    full_join(trend, by = c('rgn_id', 'habitat')) %>%
-    full_join(extent, by = c('rgn_id', 'habitat')) %>%
-    filter(habitat %in% c('coral','mangrove','saltmarsh','seaice_edge','seagrass','soft_bottom')) %>%
-    mutate(w  = ifelse(!is.na(extent) & extent > 0, 1, NA)) %>%
-    filter(!is.na(w))
+  #calculate status for plant habitats
+  plant_status <- filter(final_hab_data, kingdom == 'PLANTAE') %>%
+    group_by(species) %>%
+    filter(year == max(year)) %>%
+    ungroup %>%
+    summarize(score = (1 - mean(risk.wt)) * 100)
 
-  if(sum(d$w %in% 1 & is.na(d$trend)) > 0){
-    warning("Some regions/habitats have extent data, but no trend data.  Consider estimating these values.")
-  }
+  hab_status <- rbind(coral_status, plant_status) %>%
+    summarize(score = mean(score)) %>%
+    mutate(dimension = 'status',
+           rgn_id = 1) %>%
+    select(rgn_id, score, dimension)
 
-  if(sum(d$w %in% 1 & is.na(d$health)) > 0){
-    warning("Some regions/habitats have extent data, but no health data.  Consider estimating these values.")
-  }
+  # Trend calculations
+  ## find species with multiple assessments
+  dup_species <- hab_data$species[duplicated(hab_data[,2:4])]
+  ### there are no duplicates, meaning only one year of data for each species
 
+  # Assigned a trend of zero (0) - no change - since there is only one year of data for each species, thus do not have information to calculate trend
+  hab_trend <- data.frame(rgn_id = 1, score = 0, dimension = 'trend')
 
-  ## calculate scores
-  status <- d %>%
-    group_by(rgn_id) %>%
-    filter(!is.na(health)) %>%
-    summarize(
-      score = pmin(1, sum(health) / sum(w)) * 100,
-      dimension = 'status') %>%
-    ungroup()
-
-  trend <- d %>%
-    group_by(rgn_id) %>%
-    filter(!is.na(trend)) %>%
-    summarize(
-      score =  sum(trend) / sum(w),
-      dimension = 'trend')  %>%
-    ungroup()
-
-  scores_HAB <- rbind(status, trend) %>%
+  # return scores
+  scores_HAB <- rbind(hab_status, hab_trend) %>%
     mutate(goal = "HAB") %>%
-    select(region_id=rgn_id, goal, dimension, score)
-
-  ## reference points
-  rp <- read.csv('temp/referencePoints.csv', stringsAsFactors=FALSE) %>%
-    rbind(data.frame(goal = "HAB", method = "Health/condition variable based on current vs. historic extent",
-                     reference_point = "varies for each region/habitat"))
-  write.csv(rp, 'temp/referencePoints.csv', row.names=FALSE)
+    select(region_id = rgn_id, goal, dimension, score)
 
   # return scores
   return(scores_HAB)
@@ -1737,19 +1701,68 @@ HAB = function(layers){
 
 
 SPP = function(layers){
-  scores <-   SelectLayersData(layers, layers=c('spp_status'='status','spp_trend'='trend'), narrow = TRUE) %>%
-    select(region_id = id_num, dimension = layer, score = val_num) %>%
-    mutate(goal = 'SPP') %>%
-    mutate(score = ifelse(dimension == 'status', score*100, score))
 
-  ## reference points
-  rp <- read.csv('temp/referencePoints.csv', stringsAsFactors=FALSE) %>%
-    rbind(data.frame(goal = "SPP", method = "Average of IUCN risk categories, scaled to historic extinction",
-                     reference_point = NA))
-  write.csv(rp, 'temp/referencePoints.csv', row.names=FALSE)
+  spp_data <- SelectLayersData(layers, layers = 'spp_iucn_status'); head(spp_data)
+  spp_data <- select(spp_data, species = category, year, risk.wt = val_num)
 
+  spp_status <- spp_data %>%
+    group_by(species) %>%
+    filter(year == max(year)) %>%
+    ungroup %>%
+    summarize(score = (1 - mean(risk.wt)) * 100) %>%
+    mutate(dimension = 'status',
+           rgn_id = 1) %>%
+    select(rgn_id, score, dimension)
 
-  return(scores)
+  # Trend calculations
+  ## find species with multiple assessments
+  dup_species <- spp_data$species[duplicated(spp_data[,1:3])]
+
+  spp_trend_prep <- spp_data %>%
+    filter(species %in% dup_species) %>%
+    group_by(species) %>%
+    unique(.) %>%
+    filter(year == max(year) | year == min(year)) %>%
+    group_by(species, year) %>%
+    summarize(risk.wt_new = mean(risk.wt)) %>%
+    arrange(year) %>%
+    distinct(year) %>%
+    mutate(year = ifelse(year == max(year), "max_year", "min_year"))
+
+    #remove species that have been assessed multiple times in the same year
+    dup_species_multyear <- spp_trend_prep$species[duplicated(spp_trend_prep[,1])]
+
+  spp_trend <- spp_trend_prep %>%
+    filter(species %in% dup_species_multyear) %>%
+    spread(year, risk.wt_new) %>%
+    summarize(trend_species = ifelse(max_year > min_year, -0.5,
+                                     ifelse(max_year < min_year, 0.5,
+                                            0))) %>%
+    summarize(score = mean(trend_species)) %>%
+    mutate(rgn_id = 1,
+           dimension = 'trend') %>%
+    select(rgn_id, score, dimension)
+
+  # # lookup for weights status
+  # #  LC <- "LOWER RISK/LEAST CONCERN (LR/LC)"
+  # #  NT <- "LOWER RISK/NEAR THREATENED (LR/NT)"
+  # #  T  <- "THREATENED (T)" treat as "EN"
+  # #  VU <- "VULNERABLE (V)"
+  # #  EN <- "ENDANGERED (E)"
+  # #  LR/CD <- "LOWER RISK/CONSERVATION DEPENDENT (LR/CD)" treat as between VU and NT
+  # #  CR <- "VERY RARE AND BELIEVED TO BE DECREASING IN NUMBERS"
+  # #  DD <- "INSUFFICIENTLY KNOWN (K)"
+  # #  DD <- "INDETERMINATE (I)"
+  # #  DD <- "STATUS INADEQUATELY KNOWN-SURVEY REQUIRED OR DATA SOUGHT"
+
+  # return scores
+  scores_SPP <- rbind(spp_status, spp_trend) %>%
+    mutate(goal = "SPP") %>%
+    select(region_id = rgn_id, goal, dimension, score)
+
+  # return scores
+  return(scores_ICO)
+
 }
 
 BD = function(scores){
