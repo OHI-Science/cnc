@@ -149,7 +149,7 @@ FIS= function(layers){
   # return scores for New Caledonia Model
   scores <-  rbind(status_cnc, trend_cnc) %>%
     mutate('goal'='FIS') %>%
-    select(goal, dimension, rgn_id, score) %>%
+    select(goal, dimension, region_id = rgn_id, score) %>%
     data.frame()
 
   return(scores)
@@ -1339,14 +1339,18 @@ ICO = function(layers){
            !(species == "minor" & year == 2014 & risk.wt == "0")) %>%
     arrange(year) %>%
     mutate(year = ifelse(year == max(year), "max_year", "min_year")) %>%
-    spread(year, risk.wt) %>%
+    ungroup() %>%
+    group_by(species, year) %>%
+    summarise(risk.wt.new = mean(risk.wt)) %>%
+    spread(year, risk.wt.new) %>%
     summarize(trend_species = ifelse(max_year > min_year, -0.5,
                                      ifelse(max_year < min_year, 0.5,
                                             0))) %>%
     summarize(score = mean(trend_species)) %>%
     mutate(rgn_id = 1,
            dimension = 'trend') %>%
-    select(rgn_id, score, dimension)
+    select(rgn_id, score, dimension) %>%
+    ungroup()
 
   # # lookup for weights status
   # #  LC <- "LOWER RISK/LEAST CONCERN (LR/LC)"
@@ -1640,7 +1644,7 @@ SPP = function(layers){
     select(region_id = rgn_id, goal, dimension, score)
 
   # return scores
-  return(scores_ICO)
+  return(scores_SPP)
 
 }
 
