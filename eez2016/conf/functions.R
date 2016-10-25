@@ -21,92 +21,17 @@ FIS= function(layers){
   #layers used fis_sbmsy_2016.csv, fis_landings_2016.csv, fis_sbmsy_2016gl.csv, fis_sbmsy_2016cnc.csv, fis_landings_2016.csv, FIS_status_cnc.cvs, fis_status_gl.csv
   #FIS_trend_cnc.csv, fis_trend_gl.csv
 
-  #directories #
-  dir_cnc = '~/github/cnc/'
-  dir_cnc_eez = '~/github/cnc/eez2016'
-  layers = file.path(dir_cnc_eez, 'layers')
-  scores = read.csv(file.path(layers, 'fis_sbmsy_2016.csv'))
-  landings = read.csv(file.path(layers, 'fis_landings_2016.csv'))
 
-  scores <- SelectLayersData(layers, layers='fis_sbmsy_2016')
-  landings <- SelectLayersData(layers, layers='fis_landings_2016')
-  ###########################################################################
-  ##converting SB/SBmsy to B-scores
-  ###########################################################################
-
-  #####Global model, model penalized for underexploitation of fish stocks##### use this to compare to proof of concept model for fisheries for nc
-  B_scores <- scores %>%
-    mutate(score = ifelse(sbmsy < 0.8 , sbmsy/0.8, NA),
-           score = ifelse(sbmsy >= 0.8 & sbmsy < 1.5, 1, score),
-           score = ifelse(sbmsy >= 1.5, (3.35 - sbmsy)/1.8, score)) %>%
-    mutate(score = ifelse(score <= 0.1, 0.1, score)) %>%
-    mutate(score = ifelse(score > 1, 1, score))%>%
-    mutate(score_type = "B_score")
-
-  # to see what relationship between B/Bmsy and B_score looks like:
-  plot(score ~ sbmsy, data=B_scores, type="p") # need to not penalize underfishing as this is not the fishery intent in New Caldonia
-
-
-  #####Local model, scores NOT penalized for underexploitation of fish stocks#####
-  B_scores_cnc <- scores %>%
-    mutate(score = ifelse(sbmsy < 0.8 , sbmsy/0.8, NA),
-           score = ifelse(sbmsy >= 0.8 & sbmsy < 1.5, 1, score),
-           score = ifelse(sbmsy >= 1.5, 1, score)) %>%
-    mutate(score = ifelse(score <= 0.1, 0.1, score)) %>%
-    mutate(score = ifelse(score > 1, 1, score))%>%
-    mutate(score_type = "B_score")
-
-  # to see what relationship between B/Bmsy and B_score looks like:
-  plot(score ~ sbmsy, data=B_scores_cnc, type="p") # need to not penalize underfishing as this is not the fishery intent in New Caldonia
-
-
-
-  ###many of the marlin stocks, opah, and wahoo stocks do not have formal stock assessments
-  #to include them in the model we used the median score for all the stocks in the region
-  #and added a penalty of .25 due to unknown status of the stock
-
-  B_scores_gf <- B_scores %>% #gap fill data for stocks without formal stock assessment
-    group_by(year) %>%
-    mutate(Median_score = quantile(score, probs=c(0.5), na.rm=TRUE)) %>%
-    ungroup()
-
-  B_scores_cnc_gf <- B_scores_cnc %>% #gap fill data for stocks without formal stock assessment
-    group_by(year) %>%
-    mutate(Median_score = quantile(score, probs=c(0.5), na.rm=TRUE)) %>%
-    ungroup()
-
-  B_scores_gf <- B_scores_gf %>%
-    mutate(score_gf = Median_score*.75) %>%
-    mutate(score_gapfilled = ifelse(is.na(score), "Median gapfilled", "none")) %>%
-    mutate(score = ifelse(is.na(score), score_gf, score))
-
-  B_scores_cnc_gf <- B_scores_cnc_gf %>%
-    mutate(score_gf = Median_score*.75) %>%
-    mutate(score_gapfilled = ifelse(is.na(score), "Median gapfilled", "none")) %>%
-    mutate(score = ifelse(is.na(score), score_gf, score))
-
-
-
-
-
-  #write.csv(B_scores_gf, file.path(dir_layers ,'fis_sbmsy_2016gl.csv'), row.names=FALSE)
-  #write.csv(B_scores_cnc_gf, file.path(dir_layers ,'fis_sbmsy_2016cnc.csv'), row.names=FALSE)
-  #write.csv(landings, file.path(dir_layers ,'fis_landings_2016.csv'), row.names=FALSE)
-
-
-  ##laod in the layer data for the scores
-  scores_gl<- read.csv(file.path(dir_layers,
-                                 'fis_sbmsy_2016gl.csv'))
-  scores_cnc<- read.csv(file.path(dir_layers,
-                                  'fis_sbmsy_2016cnc.csv'))
-  landings<- read.csv(file.path(dir_layers,
-                                'fis_landings_2016.csv'))
-
-  #
   scores_gl <- SelectLayersData(layers, layers='fis_sbmsy_2016gl')
-  scores_cnc <- SelectLayersData(layers, layers= 'fis_sbmsy_2016cnc')
-  landings <- SelectLayersData(layers, layers= 'fis_landings_2016')
+  scores_cnc <- SelectLayersData(layers, layers='fis_sbmsy_2016cnc')
+  landings <- SelectLayersData(layers, layers='fis_landings_2016')
 
+  str(scores_gl)
+  scores_gl <- select(scores_gl, rgn_id = id_num, stock=category, year, score)
+  str(scores_cnc)
+  scores_cnc <- select(scores_cnc, rgn_id = id_num, stock=category, year, score=val_num)
+  str(landings)
+  landings<-select
   #############################################
   ## calculating the catch weights.
   #############################################
@@ -138,30 +63,12 @@ FIS= function(layers){
 
 
 
-  ##to make an output table with stock, year, catch, prop_catch, and score##
-  #cnc global model table
-  status_gl_table <- weights %>%
-    left_join(scores_gl, by=c('rgn_id', 'year', 'stock')) %>%
-    # remove missing data
-    select(rgn_id, year, stock, tonnes, propCatch, score)
-
-  status_gl_table<-as.data.frame(status_gl_table)
-
-  #cnc regional model table
-  status_cnc_table <- weights %>%
-    left_join(scores_cnc, by=c('rgn_id', 'year', 'stock')) %>%
-    # remove missing data
-    select(rgn_id, year, stock, tonnes, propCatch, metric, sbmsy,score)
-
-  status_cnc_table<-as.data.frame(status_cnc_table)
-
-
-  ############################################################
+ ############################################################
   #####   Join scores and weights to calculate status
   ############################################################
 
 
-  #for global model
+  #for global model/senario
   status_gl <- weights %>%
     left_join(scores_gl, by=c('rgn_id', 'year', 'stock')) %>%
 
@@ -191,7 +98,7 @@ FIS= function(layers){
 
 
 
-  #final formatting for status from global model
+  #final formatting for status from global model/senario
   status_gl <- status_gl %>%
     filter(year == max(year)) %>%
     mutate(status_gl = round(status_gl * 100, 1),
@@ -245,24 +152,16 @@ FIS= function(layers){
   ##cnc fisheries score is 95.2
 
 
-  ##### save the data
-  #New Caledonia Model
-  write.csv(status_cnc, file.path(dir_layers ,'FIS_status_cnc.csv'), row.names=FALSE)
-  write.csv(trend_cnc,  file.path(dir_layers ,'FIS_trend_cnc.csv'), row.names = FALSE)
-
-  #Global model for senario testing
-  write.csv(status_gl, file.path(dir_layers ,'fis_status_gl.csv'), row.names=FALSE)
-  write.csv(trend_gl,  file.path(dir_layers ,'fis_trend_gl.csv'), row.names = FALSE)
-
-  # assemble dimensions
-  #new one for each senario
-
   ##NEED TO CHOOSE ONE OF THE SENARIOS BELOW AND COMMENT OUT THE OTHER DEPENDING ON WHAT MODEL/SENARIO YOU WANT TO USE (GLOBAL OR NEW CALEDONIA)
   #global senario - penalizes underfishing
+  # return scores for global model using regional data but global B model
+  #scores <-  rbind(status_gl, trend_gl) %>%
+  #  mutate('goal'='FIS') %>%
+  #  select(goal, dimension, rgn_id, score) %>%
+  #  data.frame()
 
 
-
-  # return scores
+  # return scores for New Caledonia Model
   scores <-  rbind(status_cnc, trend_cnc) %>%
     mutate('goal'='FIS') %>%
     select(goal, dimension, rgn_id, score) %>%
