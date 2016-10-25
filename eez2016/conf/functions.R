@@ -27,7 +27,7 @@ FIS= function(layers){
   landings <- SelectLayersData(layers, layers='fis_landings_2016')
 
   str(scores_gl)
-  scores_gl <- select(scores_gl, rgn_id = id_num, stock=category, year, score)
+  scores_gl <- select(scores_gl, rgn_id = id_num, stock=category, year, score=val_num)
   str(scores_cnc)
   scores_cnc <- select(scores_cnc, rgn_id = id_num, stock=category, year, score=val_num)
   str(landings)
