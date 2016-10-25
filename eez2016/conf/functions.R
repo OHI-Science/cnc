@@ -1,19 +1,3 @@
-
-
-Setup = function(){
-  if(file.exists('eez2013/temp/referencePoints.csv')){file.remove('temp/referencePoints.csv')}
-  referencePoints <- data.frame(goal=as.character(),
-                                method = as.character(),
-                                reference_point = as.character())
-  write.csv(referencePoints, 'temp/referencePoints.csv', row.names=FALSE)
-}
-
-
-
-
-library(dplyr)
-library(tidyr)
-
 FIS= function(layers){
   ## FIS - Modeled for New Caledonia using two senarios - global (does not incorperate local philosphy of consistent catches of pelagics and uses the global model to penalize underfishing of stocks
   # and New Caledonia model (files_cnc) and does not penalize for underfishing a stock but does penalize for over fishing)#
@@ -24,14 +8,16 @@ FIS= function(layers){
 
   scores_gl <- SelectLayersData(layers, layers='fis_sbmsy_2016gl')
   scores_cnc <- SelectLayersData(layers, layers='fis_sbmsy_2016cnc')
-  landings <- SelectLayersData(layers, layers='fis_landings_2016')
+  # landings <- SelectLayersData(layers, layers='fis_landings_2016')
+  landings <- layers$data[['fis_landings_2016']] %>%
+    select(-layer)
 
   str(scores_gl)
   scores_gl <- select(scores_gl, rgn_id = id_num, stock=category, year, score=val_num)
   str(scores_cnc)
   scores_cnc <- select(scores_cnc, rgn_id = id_num, stock=category, year, score=val_num)
   str(landings)
-  landings<-select
+
   #############################################
   ## calculating the catch weights.
   #############################################
@@ -66,45 +52,44 @@ FIS= function(layers){
  ############################################################
   #####   Join scores and weights to calculate status
   ############################################################
-
-
-  #for global model/senario
-  status_gl <- weights %>%
-    left_join(scores_gl, by=c('rgn_id', 'year', 'stock')) %>%
-
-    select(rgn_id, year, stock, propCatch, score)
-
-  status_gl <- status_gl %>%
-    group_by(rgn_id, year) %>%
-    summarize(status_gl = prod(score^propCatch)) %>%
-    ungroup() %>%
-    data.frame()
-
-
-  trend_years <- (max(scores_gl$year)-4):max(scores_gl$year)#dont really need since we are only using the recent 5 yrs of data
-
-  trend_gl <- status_gl %>%
-    group_by(rgn_id) %>%
-    filter(year %in% trend_years) %>%
-    do(mdl = lm(status_gl ~ year, data=.)) %>%
-    summarize(rgn_id = rgn_id,
-              trend_gl = coef(mdl)['year'] * 5) %>%  ## trend multiplied by 5 to get prediction 5 years out
-    ungroup() %>%
-    mutate(trend = round(trend, 2),
-           dimension = 'trend')%>%
-    select(rgn_id, score=trend_gl, dimension)
-
-   `trend_gl<-as.data.frame(trend_gl)
-
-
-
-  #final formatting for status from global model/senario
-  status_gl <- status_gl %>%
-    filter(year == max(year)) %>%
-    mutate(status_gl = round(status_gl * 100, 1),
-      dimension = 'status')%>%
-    select(rgn_id, score=status_gl, dimension)
-  #42.9 for global model using nc data from 2011-2015 but with penaly for underfishing
+#
+#
+#   #for global model/senario
+#   status_gl <- weights %>%
+#     left_join(scores_gl, by=c('rgn_id', 'year', 'stock')) %>%
+#     select(rgn_id, year, stock, propCatch, score)
+#
+#   status_gl <- status_gl %>%
+#     group_by(rgn_id, year) %>%
+#     summarize(status_gl = prod(score^propCatch)) %>%
+#     ungroup() %>%
+#     data.frame()
+#
+#
+#   trend_years <- (max(scores_gl$year)-4):max(scores_gl$year)#dont really need since we are only using the recent 5 yrs of data
+#
+#   trend_gl <- status_gl %>%
+#     group_by(rgn_id) %>%
+#     filter(year %in% trend_years) %>%
+#     do(mdl = lm(status_gl ~ year, data=.)) %>%
+#     summarize(rgn_id = rgn_id,
+#               trend_gl = coef(mdl)['year'] * 5) %>%  ## trend multiplied by 5 to get prediction 5 years out
+#     ungroup() %>%
+#     mutate(trend = round(trend_gl, 2),
+#            dimension = 'trend')%>%
+#     select(rgn_id, score=trend_gl, dimension)
+#
+#    `trend_gl<-as.data.frame(trend_gl)
+#
+#
+#
+#   #final formatting for status from global model/senario
+#   status_gl <- status_gl %>%
+#     filter(year == max(year)) %>%
+#     mutate(status_gl = round(status_gl * 100, 1),
+#       dimension = 'status')%>%
+#     select(rgn_id, score=status_gl, dimension)
+#   #42.9 for global model using nc data from 2011-2015 but with penaly for underfishing
 
 
   #######for local cnc model###########3
@@ -172,11 +157,6 @@ FIS= function(layers){
 }
 ######end of fis code
 
-
-<<<<<<< HEAD
-=======
-
->>>>>>> a2c1780553dd896cc160d484e43b78537a63dd4e
 
 MAR = function(layers, status_year){
 
