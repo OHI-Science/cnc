@@ -17,7 +17,8 @@ ico <- read_csv(file.path(dir_ico, 'ico.csv')) %>%
 full_spp_data <- read_csv(file.path('~/github/cnc/prep/SPP/full_spp_data.csv'))
 
 #merge data frames
-ico_data <- left_join(ico, full_spp_data)
+ico_data <- left_join(ico, full_spp_data,
+                      by = 'species')
 
 # lookup for weights iucn_status
 w.risk_category <-  c('LC' = 0,
