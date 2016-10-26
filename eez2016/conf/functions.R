@@ -1,19 +1,3 @@
-
-
-Setup = function(){
-  if(file.exists('eez2013/temp/referencePoints.csv')){file.remove('temp/referencePoints.csv')}
-  referencePoints <- data.frame(goal=as.character(),
-                                method = as.character(),
-                                reference_point = as.character())
-  write.csv(referencePoints, 'temp/referencePoints.csv', row.names=FALSE)
-}
-
-
-
-
-library(dplyr)
-library(tidyr)
-
 FIS= function(layers){
   ## FIS - Modeled for New Caledonia using two senarios - global (does not incorperate local philosphy of consistent catches of pelagics and uses the global model to penalize underfishing of stocks
   # and New Caledonia model (files_cnc) and does not penalize for underfishing a stock but does penalize for over fishing)#
@@ -24,14 +8,16 @@ FIS= function(layers){
 
   scores_gl <- SelectLayersData(layers, layers='fis_sbmsy_2016gl')
   scores_cnc <- SelectLayersData(layers, layers='fis_sbmsy_2016cnc')
-  landings <- SelectLayersData(layers, layers='fis_landings_2016')
+  # landings <- SelectLayersData(layers, layers='fis_landings_2016')
+  landings <- layers$data[['fis_landings_2016']] %>%
+    select(-layer)
 
   str(scores_gl)
   scores_gl <- select(scores_gl, rgn_id = id_num, stock=category, year, score=val_num)
   str(scores_cnc)
   scores_cnc <- select(scores_cnc, rgn_id = id_num, stock=category, year, score=val_num)
   str(landings)
-  landings<-select
+
   #############################################
   ## calculating the catch weights.
   #############################################
@@ -66,45 +52,44 @@ FIS= function(layers){
  ############################################################
   #####   Join scores and weights to calculate status
   ############################################################
-
-
-  #for global model/senario
-  status_gl <- weights %>%
-    left_join(scores_gl, by=c('rgn_id', 'year', 'stock')) %>%
-
-    select(rgn_id, year, stock, propCatch, score)
-
-  status_gl <- status_gl %>%
-    group_by(rgn_id, year) %>%
-    summarize(status_gl = prod(score^propCatch)) %>%
-    ungroup() %>%
-    data.frame()
-
-
-  trend_years <- (max(scores_gl$year)-4):max(scores_gl$year)#dont really need since we are only using the recent 5 yrs of data
-
-  trend_gl <- status_gl %>%
-    group_by(rgn_id) %>%
-    filter(year %in% trend_years) %>%
-    do(mdl = lm(status_gl ~ year, data=.)) %>%
-    summarize(rgn_id = rgn_id,
-              trend_gl = coef(mdl)['year'] * 5) %>%  ## trend multiplied by 5 to get prediction 5 years out
-    ungroup() %>%
-    mutate(trend = round(trend, 2),
-           dimension = 'trend')%>%
-    select(rgn_id, score=trend_gl, dimension)
-
-   `trend_gl<-as.data.frame(trend_gl)
-
-
-
-  #final formatting for status from global model/senario
-  status_gl <- status_gl %>%
-    filter(year == max(year)) %>%
-    mutate(status_gl = round(status_gl * 100, 1),
-      dimension = 'status')%>%
-    select(rgn_id, score=status_gl, dimension)
-  #42.9 for global model using nc data from 2011-2015 but with penaly for underfishing
+#
+#
+#   #for global model/senario
+#   status_gl <- weights %>%
+#     left_join(scores_gl, by=c('rgn_id', 'year', 'stock')) %>%
+#     select(rgn_id, year, stock, propCatch, score)
+#
+#   status_gl <- status_gl %>%
+#     group_by(rgn_id, year) %>%
+#     summarize(status_gl = prod(score^propCatch)) %>%
+#     ungroup() %>%
+#     data.frame()
+#
+#
+#   trend_years <- (max(scores_gl$year)-4):max(scores_gl$year)#dont really need since we are only using the recent 5 yrs of data
+#
+#   trend_gl <- status_gl %>%
+#     group_by(rgn_id) %>%
+#     filter(year %in% trend_years) %>%
+#     do(mdl = lm(status_gl ~ year, data=.)) %>%
+#     summarize(rgn_id = rgn_id,
+#               trend_gl = coef(mdl)['year'] * 5) %>%  ## trend multiplied by 5 to get prediction 5 years out
+#     ungroup() %>%
+#     mutate(trend = round(trend_gl, 2),
+#            dimension = 'trend')%>%
+#     select(rgn_id, score=trend_gl, dimension)
+#
+#    `trend_gl<-as.data.frame(trend_gl)
+#
+#
+#
+#   #final formatting for status from global model/senario
+#   status_gl <- status_gl %>%
+#     filter(year == max(year)) %>%
+#     mutate(status_gl = round(status_gl * 100, 1),
+#       dimension = 'status')%>%
+#     select(rgn_id, score=status_gl, dimension)
+#   #42.9 for global model using nc data from 2011-2015 but with penaly for underfishing
 
 
   #######for local cnc model###########3
@@ -143,11 +128,13 @@ FIS= function(layers){
   ##0 slope so no trend for cnc fis status
 
   ### final formatting of status data for new caledonia model
-  status_cnc <- status_cnc %>%
+  fis_status <- status_cnc %>%
     filter(year == max(year)) %>%
-    mutate(score = round(status_cnc * 100, 1),
+    mutate(score =round(status_cnc*100,1), #not sure why *100 is not working in this code added this code below
       dimension = 'status')%>%
     select(rgn_id, score=status_cnc, dimension)
+
+  fis_status$score<-fis_status$score*100 #translates the proportion score into a percentage
 
   ##cnc fisheries score is 95.2
 
@@ -162,9 +149,9 @@ FIS= function(layers){
 
 
   # return scores for New Caledonia Model
-  scores <-  rbind(status_cnc, trend_cnc) %>%
+  scores <-  rbind(fis_status, trend_cnc) %>%
     mutate('goal'='FIS') %>%
-    select(goal, dimension, rgn_id, score) %>%
+    select(goal, dimension, region_id = rgn_id, score) %>%
     data.frame()
 
   return(scores)
@@ -172,11 +159,6 @@ FIS= function(layers){
 }
 ######end of fis code
 
-
-<<<<<<< HEAD
-=======
-
->>>>>>> a2c1780553dd896cc160d484e43b78537a63dd4e
 
 MAR = function(layers, status_year){
 
@@ -189,7 +171,6 @@ MAR = function(layers, status_year){
 
   popn_inland25mi <- SelectLayersData(layers, layers='mar_coastalpopn_inland25mi', narrow = TRUE) %>%
     select(rgn_id=id_num, year, popsum=val_num)
-
 
   rky <-  harvest_tonnes %>%
     left_join(sustainability_score, by = c('rgn_id', 'species_code'))
@@ -1335,7 +1316,7 @@ LE = function(scores, layers){
 ICO = function(layers){
 
   ico_data <- SelectLayersData(layers, layers = 'ico_iucn_status'); head(ico_data)
-  ico_data <- select(ico_data, species = category, iucn_status, year, risk.wt = val_num)
+  ico_data <- select(ico_data, species = category, year, risk.wt = val_num)
 
   ico_status <- ico_data %>%
     group_by(species) %>%
@@ -1347,26 +1328,29 @@ ICO = function(layers){
     select(rgn_id, score, dimension)
 
   # Trend calculations
-  ## find species with multiple years of assessment
+  ## find species with multiple assessments
 
-  dup_species <- ico_data$species[duplicated(ico_data[,1:2])]
+  dup_species <- ico_data$species[duplicated(ico_data[,1])]
 
   ico_trend <- ico_data %>%
     filter(species %in% dup_species) %>%
-    select(-iucn_status) %>%
     group_by(species) %>%
     filter(year == max(year) | year == min(year),
            !(species == "minor" & year == 2014 & risk.wt == "0")) %>%
     arrange(year) %>%
     mutate(year = ifelse(year == max(year), "max_year", "min_year")) %>%
-    spread(year, risk.wt) %>%
+    ungroup() %>%
+    group_by(species, year) %>%
+    summarise(risk.wt.new = mean(risk.wt)) %>%
+    spread(year, risk.wt.new) %>%
     summarize(trend_species = ifelse(max_year > min_year, -0.5,
                                      ifelse(max_year < min_year, 0.5,
                                             0))) %>%
     summarize(score = mean(trend_species)) %>%
     mutate(rgn_id = 1,
            dimension = 'trend') %>%
-    select(rgn_id, score, dimension)
+    select(rgn_id, score, dimension) %>%
+    ungroup()
 
   # # lookup for weights status
   # #  LC <- "LOWER RISK/LEAST CONCERN (LR/LC)"
@@ -1382,7 +1366,8 @@ ICO = function(layers){
 
   # return scores
   scores_ICO <- rbind(ico_status, ico_trend) %>%
-    mutate(goal = "ICO") %>%
+    mutate(goal = "ICO",
+           rgn_id = as.integer(rgn_id)) %>%
     select(region_id = rgn_id, goal, dimension, score)
 
   # return scores
@@ -1464,7 +1449,8 @@ LSP = function(layers){
     #        dimension = 'trend')
 
     scores_LSP <- rbind(lsp_status, lsp_trend) %>%
-      mutate(goal = "LSP") %>%
+      mutate(goal = "LSP",
+             rgn_id = as.integer(rgn_id)) %>%
       select(region_id = rgn_id, goal, dimension, score)
 
     # return scores
@@ -1569,7 +1555,7 @@ HAB = function(layers){
     summarize(score = (1 - mean(risk.wt)) * 100)
 
   #calculate status for plant habitats
-  plant_status <- filter(final_hab_data, kingdom == 'PLANTAE') %>%
+  plant_status <- filter(hab_data, kingdom == 'PLANTAE') %>%
     group_by(species) %>%
     filter(year == max(year)) %>%
     ungroup %>%
@@ -1591,7 +1577,8 @@ HAB = function(layers){
 
   # return scores
   scores_HAB <- rbind(hab_status, hab_trend) %>%
-    mutate(goal = "HAB") %>%
+    mutate(goal = "HAB",
+           rgn_id = as.integer(rgn_id)) %>%
     select(region_id = rgn_id, goal, dimension, score)
 
   # return scores
@@ -1615,17 +1602,17 @@ SPP = function(layers){
 
   # Trend calculations
   ## find species with multiple assessments
-  dup_species <- spp_data$species[duplicated(spp_data[,1:3])]
+  dup_species <- spp_data$species[duplicated(spp_data[,1])]
 
   spp_trend_prep <- spp_data %>%
     filter(species %in% dup_species) %>%
     group_by(species) %>%
-    unique(.) %>%
     filter(year == max(year) | year == min(year)) %>%
+    ungroup() %>%
     group_by(species, year) %>%
     summarize(risk.wt_new = mean(risk.wt)) %>%
-    arrange(year) %>%
-    distinct(year) %>%
+    ungroup() %>%
+    group_by(species) %>%
     mutate(year = ifelse(year == max(year), "max_year", "min_year"))
 
     #remove species that have been assessed multiple times in the same year
@@ -1656,11 +1643,12 @@ SPP = function(layers){
 
   # return scores
   scores_SPP <- rbind(spp_status, spp_trend) %>%
-    mutate(goal = "SPP") %>%
+    mutate(goal = "SPP",
+           rgn_id = as.integer(rgn_id)) %>%
     select(region_id = rgn_id, goal, dimension, score)
 
   # return scores
-  return(scores_ICO)
+  return(scores_SPP)
 
 }
 
