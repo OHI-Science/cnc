@@ -38,17 +38,12 @@ PlotMapMulti(scores       = readr::read_csv('scores.csv'),
 rgns_complete <- read.csv('spatial/regions_list.csv')
 rgn_names <- read.csv('spatial/regions_list.csv')
 
-## BHI regions
+## CNC regions
 rgns <- rgns_complete
-rgns_to_plot <- rgns$region_id
+rgns_to_plot <- rgns$rgn_id
 
-PlotFlowerMulti(scores          = readr::read_csv('scores.csv') %>% filter(region_id %in% rgns_to_plot),
+PlotFlowerMulti(scores          = readr::read_csv('scores.csv'),
                 rgns_to_plot    = rgns_to_plot,
                 rgn_names       = rgn_names,
-                name_fig        = 'reports/figures',
+                name_fig        = 'reports/figures/flower',
                 assessment_name = 'New Caledonia')
-
-
-
-
-

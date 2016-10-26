@@ -15,7 +15,8 @@ PlotFlowerMulti <- function(scores          = read.csv('scores.csv'), # datafram
                             save_fig        = TRUE,
                             name_fig        = 'reports/figures/flower',
                             overwrite       = TRUE,
-                            color_scheme    = 'new' ) {
+                            color_scheme    = 'new' ,
+                            path_figures = 'reports/figures/flower') {
   # DEBUG: scores=read.csv('scores.csv'); rgn_names = read.csv('layers/rgn_global.csv'); goals = read.csv('conf/goals.csv'); fld_value_id = 'region_id'; fld_value_score = 'score';dim_choice = 'score'; print_fig = TRUE; save_fig = TRUE; name_fig = 'reports/figures/flower'; overwrite = TRUE; color_scheme = 'new'
 
   ## setup ----
