@@ -149,3 +149,17 @@
 "CP","Health/condition variable based on current vs. historic extent","varies for each region/habitat"
 "TR","spatial: 90th quantile","0.0490649629866667"
 "CW","spatial: pressures scaled from 0-1 at raster level",NA
+"MAR","spatial 95th quantile","region id: 1 value: 0.00418291101226476"
+"AO","??",NA
+"NP","Harvest peak within region times 0.65 buffer","varies for each region"
+"CS","Health/condition variable based on current vs. historic extent","varies for each region/habitat"
+"CP","Health/condition variable based on current vs. historic extent","varies for each region/habitat"
+"TR","spatial: 90th quantile","0.0490649629866667"
+"CW","spatial: pressures scaled from 0-1 at raster level",NA
+"MAR","spatial 95th quantile","region id: 1 value: 0.00418291101226476"
+"AO","??",NA
+"NP","Harvest peak within region times 0.65 buffer","varies for each region"
+"CS","Health/condition variable based on current vs. historic extent","varies for each region/habitat"
+"CP","Health/condition variable based on current vs. historic extent","varies for each region/habitat"
+"TR","spatial: 90th quantile","0.0490649629866667"
+"CW","spatial: pressures scaled from 0-1 at raster level",NA
