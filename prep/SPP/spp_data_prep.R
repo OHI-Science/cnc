@@ -38,15 +38,7 @@ w.risk_category <-  c('LC' = 0,
 final_spp_data <- filter(full_spp_data, !iucn_status == 'DD') %>%
 #Merge w.risk_category with iucn_status
   mutate(risk.wt = w.risk_category[iucn_status]) %>%
-  filter(year %in% 2006:2016) %>% ##only selected the past 10 years for biodiversity status -- this could be changed
-  group_by(species) %>%
-  filter(year == max(year)) %>%
-  ungroup %>%
-  mutate(rgn_id = 1) %>%
-  select(rgn_id, species, iucn_status, year, risk.wt)
+  filter(year %in% 2006:2016) ##only selected the past 10 years for biodiversity status -- this could be changed
 
 write_csv(final_spp_data, file.path(dir_spp, "final_spp_data.csv"))
 write_csv(final_spp_data, file.path(dir_layers, "spp_iucn_status_cnc2016_EJP.csv"))
-
-spp_status <- final_spp_data %>%
-  summarize(status = (1 - mean(risk.wt)) * 100)

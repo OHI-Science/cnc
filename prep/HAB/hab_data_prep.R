@@ -31,19 +31,18 @@ final_hab_data <- filter(hab, !iucn_status == 'DD') %>%
   mutate(risk.wt = w.risk_category[iucn_status]) %>%
   group_by(species) %>%
   ungroup %>%
-  mutate(rgn_id = 1) %>%
-  select(rgn_id, kingdom, species, iucn_status, year, risk.wt)
+  select(kingdom, species, year, risk.wt)
 
 #calculate status for coral habitats
 coral_status <- filter(final_hab_data, kingdom == 'ANIMALIA') %>%
-  summarize(status = (1 - mean(risk.wt)) * 100)
+  summarize(score = (1 - mean(risk.wt)) * 100)
 
 #calculate status for plant habitats
 plant_status <- filter(final_hab_data, kingdom == 'PLANTAE') %>%
-  summarize(status = (1 - mean(risk.wt)) * 100)
+  summarize(score = (1 - mean(risk.wt)) * 100)
 
 hab_status <- rbind(coral_status, plant_status) %>%
-  summarize(score = mean(status))
+  summarize(score = mean(score))
 
 write_csv(final_hab_data, file.path(dir_hab, "final_hab_data.csv"))
 write_csv(final_hab_data, file.path(dir_layers, "hab_iucn_status_cnc2016_EJP.csv"))
