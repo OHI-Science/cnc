@@ -159,155 +159,155 @@ FIS= function(layers){
 }
 ######end of fis code
 
-
-MAR = function(layers, status_year){
-
-   # layers used: mar_harvest_tonnes, mar_harvest_species, mar_sustainability_score, mar_coastalpopn_inland25mi, mar_trend_years
-  harvest_tonnes <- SelectLayersData(layers, layers='mar_harvest_tonnes', narrow = TRUE) %>%
-    select(rgn_id=id_num, species_code=category, year, tonnes=val_num)
-
-  sustainability_score <- SelectLayersData(layers, layers='mar_sustainability_score', narrow = TRUE) %>%
-    select(rgn_id=id_num, species_code=category, sust_coeff=val_num)
-
-  popn_inland25mi <- SelectLayersData(layers, layers='mar_coastalpopn_inland25mi', narrow = TRUE) %>%
-    select(rgn_id=id_num, year, popsum=val_num)
-
-  rky <-  harvest_tonnes %>%
-    left_join(sustainability_score, by = c('rgn_id', 'species_code'))
-
-  # fill in gaps with no data
-  rky <- spread(rky, year, tonnes)
-  rky <- gather(rky, "year", "tonnes", 4:dim(rky)[2])
-
-
-  # 4-year rolling mean of data
-  m <- rky %>%
-    mutate(year = as.numeric(as.character(year))) %>%
-    group_by(rgn_id, species_code, sust_coeff) %>%
-    arrange(rgn_id, species_code, year) %>%
-    mutate(sm_tonnes = zoo::rollapply(tonnes, 4, mean, na.rm=TRUE, partial=TRUE)) %>%
-    ungroup()
-
-  # smoothed mariculture harvest * sustainability coefficient
-  m <- m %>%
-    mutate(sust_tonnes = sust_coeff * sm_tonnes)
-
-
-  # aggregate all weighted timeseries per region, and divide by coastal human population
-  ry = m %>%
-    group_by(rgn_id, year) %>%
-    summarize(sust_tonnes_sum = sum(sust_tonnes, na.rm=TRUE)) %>%  #na.rm = TRUE assumes that NA values are 0
-    left_join(popn_inland25mi, by = c('rgn_id','year')) %>%
-    mutate(mar_pop = sust_tonnes_sum / popsum) %>%
-    ungroup()
-
-
-  # get reference quantile based on argument years
-  ref_95pct_data <- ry %>%
-    filter(year <= status_year)
-
-  ref_95pct <- quantile(ref_95pct_data$mar_pop, 0.95, na.rm=TRUE)
-
-  # identify reference rgn_id
-  ry_ref = ref_95pct_data %>%
-    arrange(mar_pop) %>%
-    filter(mar_pop >= ref_95pct)
-  message(sprintf('95th percentile for MAR ref pt is: %s\n', ref_95pct)) # rgn_id 25 = Thailand
-  message(sprintf('95th percentile rgn_id for MAR ref pt is: %s\n', ry_ref$rgn_id[1])) # rgn_id 25 = Thailand
-
-  rp <- read.csv('temp/referencePoints.csv', stringsAsFactors=FALSE) %>%
-    rbind(data.frame(goal = "MAR", method = "spatial 95th quantile",
-                     reference_point = paste0("region id: ", ry_ref$rgn_id[1], ' value: ', ref_95pct)))
-  write.csv(rp, 'temp/referencePoints.csv', row.names=FALSE)
-
-
-  ry = ry %>%
-    mutate(status = ifelse(mar_pop / ref_95pct > 1,
-                           1,
-                           mar_pop / ref_95pct))
-  status <- ry %>%
-    filter(year == status_year) %>%
-    select(rgn_id, status) %>%
-    mutate(status = round(status*100, 2))
-
-
-  # get MAR trend
-  trend = ry %>%
-    group_by(rgn_id) %>%
-    do(mdl = lm(status ~ year, data=., subset=year %in% (status_year-4):(status_year))) %>%
-    summarize(rgn_id, trend = coef(mdl)['year'] * 5) %>%
-    ungroup()
-
-  trend <- trend %>%
-    mutate(trend = ifelse(trend>1, 1, trend)) %>%
-    mutate(trend = ifelse(trend<(-1), (-1), trend)) %>%
-    mutate(trend = round(trend, 2))
-
-  # return scores
-  scores = status %>%
-    select(region_id = rgn_id,
-           score     = status) %>%
-    mutate(dimension='status') %>%
-    rbind(
-      trend %>%
-        select(region_id = rgn_id,
-               score     = trend) %>%
-        mutate(dimension = 'trend')) %>%
-    mutate(goal='MAR')
-
-  return(scores)
-}
-
-
-FP = function(layers, scores){
-
-  # weights
-  w <-  SelectLayersData(layers, layers='fp_wildcaught_weight', narrow = TRUE) %>%
-    select(region_id = id_num, w_FIS = val_num); head(w)
-
-  # scores
-  s <- scores %>%
-    filter(goal %in% c('FIS', 'MAR')) %>%
-    filter(!(dimension %in% c('pressures', 'resilience'))) %>%
-    left_join(w, by="region_id")  %>%
-    mutate(w_MAR = 1 - w_FIS) %>%
-    mutate(weight = ifelse(goal == "FIS", w_FIS, w_MAR))
+# Removing MAR from all calculations
+# MAR = function(layers, status_year){
+#
+#    # layers used: mar_harvest_tonnes, mar_harvest_species, mar_sustainability_score, mar_coastalpopn_inland25mi, mar_trend_years
+#   harvest_tonnes <- SelectLayersData(layers, layers='mar_harvest_tonnes', narrow = TRUE) %>%
+#     select(rgn_id=id_num, species_code=category, year, tonnes=val_num)
+#
+#   sustainability_score <- SelectLayersData(layers, layers='mar_sustainability_score', narrow = TRUE) %>%
+#     select(rgn_id=id_num, species_code=category, sust_coeff=val_num)
+#
+#   popn_inland25mi <- SelectLayersData(layers, layers='mar_coastalpopn_inland25mi', narrow = TRUE) %>%
+#     select(rgn_id=id_num, year, popsum=val_num)
+#
+#   rky <-  harvest_tonnes %>%
+#     left_join(sustainability_score, by = c('rgn_id', 'species_code'))
+#
+#   # fill in gaps with no data
+#   rky <- spread(rky, year, tonnes)
+#   rky <- gather(rky, "year", "tonnes", 4:dim(rky)[2])
+#
+#
+#   # 4-year rolling mean of data
+#   m <- rky %>%
+#     mutate(year = as.numeric(as.character(year))) %>%
+#     group_by(rgn_id, species_code, sust_coeff) %>%
+#     arrange(rgn_id, species_code, year) %>%
+#     mutate(sm_tonnes = zoo::rollapply(tonnes, 4, mean, na.rm=TRUE, partial=TRUE)) %>%
+#     ungroup()
+#
+#   # smoothed mariculture harvest * sustainability coefficient
+#   m <- m %>%
+#     mutate(sust_tonnes = sust_coeff * sm_tonnes)
+#
+#
+#   # aggregate all weighted timeseries per region, and divide by coastal human population
+#   ry = m %>%
+#     group_by(rgn_id, year) %>%
+#     summarize(sust_tonnes_sum = sum(sust_tonnes, na.rm=TRUE)) %>%  #na.rm = TRUE assumes that NA values are 0
+#     left_join(popn_inland25mi, by = c('rgn_id','year')) %>%
+#     mutate(mar_pop = sust_tonnes_sum / popsum) %>%
+#     ungroup()
+#
+#
+#   # get reference quantile based on argument years
+#   ref_95pct_data <- ry %>%
+#     filter(year <= status_year)
+#
+#   ref_95pct <- quantile(ref_95pct_data$mar_pop, 0.95, na.rm=TRUE)
+#
+#   # identify reference rgn_id
+#   ry_ref = ref_95pct_data %>%
+#     arrange(mar_pop) %>%
+#     filter(mar_pop >= ref_95pct)
+#   message(sprintf('95th percentile for MAR ref pt is: %s\n', ref_95pct)) # rgn_id 25 = Thailand
+#   message(sprintf('95th percentile rgn_id for MAR ref pt is: %s\n', ry_ref$rgn_id[1])) # rgn_id 25 = Thailand
+#
+#   rp <- read.csv('temp/referencePoints.csv', stringsAsFactors=FALSE) %>%
+#     rbind(data.frame(goal = "MAR", method = "spatial 95th quantile",
+#                      reference_point = paste0("region id: ", ry_ref$rgn_id[1], ' value: ', ref_95pct)))
+#   write.csv(rp, 'temp/referencePoints.csv', row.names=FALSE)
+#
+#
+#   ry = ry %>%
+#     mutate(status = ifelse(mar_pop / ref_95pct > 1,
+#                            1,
+#                            mar_pop / ref_95pct))
+#   status <- ry %>%
+#     filter(year == status_year) %>%
+#     select(rgn_id, status) %>%
+#     mutate(status = round(status*100, 2))
+#
+#
+#   # get MAR trend
+#   trend = ry %>%
+#     group_by(rgn_id) %>%
+#     do(mdl = lm(status ~ year, data=., subset=year %in% (status_year-4):(status_year))) %>%
+#     summarize(rgn_id, trend = coef(mdl)['year'] * 5) %>%
+#     ungroup()
+#
+#   trend <- trend %>%
+#     mutate(trend = ifelse(trend>1, 1, trend)) %>%
+#     mutate(trend = ifelse(trend<(-1), (-1), trend)) %>%
+#     mutate(trend = round(trend, 2))
+#
+#   # return scores
+#   scores = status %>%
+#     select(region_id = rgn_id,
+#            score     = status) %>%
+#     mutate(dimension='status') %>%
+#     rbind(
+#       trend %>%
+#         select(region_id = rgn_id,
+#                score     = trend) %>%
+#         mutate(dimension = 'trend')) %>%
+#     mutate(goal='MAR')
+#
+#   return(scores)
+# }
 
 
-  ## Some warning messages due to potential mismatches in data:
-  # NA score but there is a weight
-  tmp <- filter(s, goal=='FIS' & is.na(score) & (!is.na(w_FIS) & w_FIS!=0) & dimension == "score")
-  if(dim(tmp)[1]>0){
-    warning(paste0("Check: these regions have a FIS weight but no score: ",
-                   paste(as.character(tmp$region_id), collapse = ", ")))}
-
-  tmp <- filter(s, goal=='MAR' & is.na(score) & (!is.na(w_MAR) & w_MAR!=0) & dimension == "score")
-  if(dim(tmp)[1]>0){
-    warning(paste0("Check: these regions have a MAR weight but no score: ",
-                   paste(as.character(tmp$region_id), collapse = ", ")))}
-
-  # score, but the weight is NA or 0
-  tmp <- filter(s, goal=='FIS' & (!is.na(score) & score > 0) & (is.na(w_FIS) | w_FIS==0) & dimension == "score" & region_id !=0)
-  if(dim(tmp)[1]>0){
-    warning(paste0("Check: these regions have a FIS score but no weight: ",
-                   paste(as.character(tmp$region_id), collapse = ", ")))}
-
-  tmp <- filter(s, goal=='MAR' & (!is.na(score) & score > 0) & (is.na(w_MAR) | w_MAR==0) & dimension == "score" & region_id !=0)
-  if(dim(tmp)[1]>0){
-    warning(paste0("Check: these regions have a MAR score but no weight: ",
-                   paste(as.character(tmp$region_id), collapse = ", ")))}
-
-  s <- s  %>%
-    group_by(region_id, dimension) %>%
-    summarize(score = weighted.mean(score, weight, na.rm=TRUE)) %>%
-    mutate(goal = "FP") %>%
-    ungroup() %>%
-    select(region_id, goal, dimension, score) %>%
-    data.frame()
-
-  # return all scores
-  return(rbind(scores, s))
-}
+# FP = function(layers, scores){
+#
+#   # weights
+#   w <-  SelectLayersData(layers, layers='fp_wildcaught_weight', narrow = TRUE) %>%
+#     select(region_id = id_num, w_FIS = val_num); head(w)
+#
+#   # scores
+#   s <- scores %>%
+#     filter(goal %in% c('FIS', 'MAR')) %>%
+#     filter(!(dimension %in% c('pressures', 'resilience'))) %>%
+#     left_join(w, by="region_id")  %>%
+#     mutate(w_MAR = 1 - w_FIS) %>%
+#     mutate(weight = ifelse(goal == "FIS", w_FIS, w_MAR))
+#
+#
+#   ## Some warning messages due to potential mismatches in data:
+#   # NA score but there is a weight
+#   tmp <- filter(s, goal=='FIS' & is.na(score) & (!is.na(w_FIS) & w_FIS!=0) & dimension == "score")
+#   if(dim(tmp)[1]>0){
+#     warning(paste0("Check: these regions have a FIS weight but no score: ",
+#                    paste(as.character(tmp$region_id), collapse = ", ")))}
+#
+#   tmp <- filter(s, goal=='MAR' & is.na(score) & (!is.na(w_MAR) & w_MAR!=0) & dimension == "score")
+#   if(dim(tmp)[1]>0){
+#     warning(paste0("Check: these regions have a MAR weight but no score: ",
+#                    paste(as.character(tmp$region_id), collapse = ", ")))}
+#
+#   # score, but the weight is NA or 0
+#   tmp <- filter(s, goal=='FIS' & (!is.na(score) & score > 0) & (is.na(w_FIS) | w_FIS==0) & dimension == "score" & region_id !=0)
+#   if(dim(tmp)[1]>0){
+#     warning(paste0("Check: these regions have a FIS score but no weight: ",
+#                    paste(as.character(tmp$region_id), collapse = ", ")))}
+#
+#   tmp <- filter(s, goal=='MAR' & (!is.na(score) & score > 0) & (is.na(w_MAR) | w_MAR==0) & dimension == "score" & region_id !=0)
+#   if(dim(tmp)[1]>0){
+#     warning(paste0("Check: these regions have a MAR score but no weight: ",
+#                    paste(as.character(tmp$region_id), collapse = ", ")))}
+#
+#   s <- s  %>%
+#     group_by(region_id, dimension) %>%
+#     summarize(score = weighted.mean(score, weight, na.rm=TRUE)) %>%
+#     mutate(goal = "FP") %>%
+#     ungroup() %>%
+#     select(region_id, goal, dimension, score) %>%
+#     data.frame()
+#
+#   # return all scores
+#   return(rbind(scores, s))
+# }
 
 
 AO = function(layers,
