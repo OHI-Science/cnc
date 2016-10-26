@@ -85,13 +85,13 @@ Data sources:
 - Waycott, M., Duarte, C. M., Carruthers, T. J. B., Orth, R. J. et al. (2009). **Accelerating loss of seagrasses across the globe threatens coastal ecosystems**. _Proceedings of the National Academy of Sciences_ 106(30):12377-12381.
 - Bruno, J. F. & Selig, E. R. (2007) **Regional decline of coral cover in the Indo-Pacific: timing, extent, and subregional comparisons**. _PLoS ONE_ 2(8): e711. doi:10.1371/journal.pone.0000711
 - Schutte, V. G. W., Selig, E.R. & Bruno, J. F. (2010).  **Regional spatio-temporal trends in Caribbean coral reef benthic communities**. _Marine Ecology Progress Series_ 402: 115ê¢????122.","equal","global trends were applied equally to all regions.","hab_trend","~/github/ohi-global/eez2016/layers/hab_trend.csv","rgn_id",,"habitat",,"trend",,TRUE,,,-0.0786428796215429,0,FALSE,,,,1,FALSE
-"HAB","hab_iucn_status","hab_iucn_status_cnc2016_EJP.csv","risk.wt","category","Habitat IUCN Conservation Status","IUCN conservation status of habitat species (plants and corals)","","","","","rgn_id",,"kingdom","year","risk.wt",,TRUE,2008,2014,0,0.6,TRUE,"species,iucn_status",,279,1,FALSE
+"HAB","hab_iucn_status","hab_iucn_status_cnc2016_EJP.csv","risk.wt","category","Habitat IUCN Conservation Status","IUCN conservation status of habitat species (plants and corals)","","","","",,,"kingdom","year","risk.wt",,TRUE,2008,2014,0,0.6,TRUE,"species",,279,1,FALSE
 "ICO","ico_iucn_status","ico_iucn_status_cnc2016_EJP.csv","risk.wt","category","IUCN extinction risk category for iconic species","International Union for Conservation of Nature (IUCN) Red List threat categories with aggregated species lists
 
 Data sources:
 
 - [International Union for Conservation of Nature (IUCN)](http://www.iucnredlist.org/technical-documents/classification-schemes/threats-classification-scheme)
-","equal","global status was applied equally to all regions. ","ico_spp_iucn_status","~/github/ohi-global/eez2016/layers/ico_spp_iucn_status.csv",,,"species","year","risk.wt",,TRUE,2006,2015,0,0.8,TRUE,"iucn_status",,4,1,FALSE
+","equal","global status was applied equally to all regions. ","ico_spp_iucn_status","~/github/ohi-global/eez2016/layers/ico_spp_iucn_status.csv",,,"species","year","risk.wt",,TRUE,2006,2015,0,0.8,TRUE,"iucn_status",,2,1,FALSE
 "LE","le_gdp","le_gdp_gl2016placeholder.csv","usd","2010 USD","GDP","Gross Domestic Product (GDP) data (reported in 2012 US dollars) from The World Bank.
 
 Data sources:
