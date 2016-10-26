@@ -170,7 +170,6 @@ MAR = function(layers, status_year){
   popn_inland25mi <- SelectLayersData(layers, layers='mar_coastalpopn_inland25mi', narrow = TRUE) %>%
     select(rgn_id=id_num, year, popsum=val_num)
 
-
   rky <-  harvest_tonnes %>%
     left_join(sustainability_score, by = c('rgn_id', 'species_code'))
 
@@ -1315,7 +1314,7 @@ LE = function(scores, layers){
 ICO = function(layers){
 
   ico_data <- SelectLayersData(layers, layers = 'ico_iucn_status'); head(ico_data)
-  ico_data <- select(ico_data, species = category, iucn_status, year, risk.wt = val_num)
+  ico_data <- select(ico_data, species = category, year, risk.wt = val_num)
 
   ico_status <- ico_data %>%
     group_by(species) %>%
@@ -1327,13 +1326,12 @@ ICO = function(layers){
     select(rgn_id, score, dimension)
 
   # Trend calculations
-  ## find species with multiple years of assessment
+  ## find species with multiple assessments
 
-  dup_species <- ico_data$species[duplicated(ico_data[,1:2])]
+  dup_species <- ico_data$species[duplicated(ico_data[,1])]
 
   ico_trend <- ico_data %>%
     filter(species %in% dup_species) %>%
-    select(-iucn_status) %>%
     group_by(species) %>%
     filter(year == max(year) | year == min(year),
            !(species == "minor" & year == 2014 & risk.wt == "0")) %>%
@@ -1366,7 +1364,8 @@ ICO = function(layers){
 
   # return scores
   scores_ICO <- rbind(ico_status, ico_trend) %>%
-    mutate(goal = "ICO") %>%
+    mutate(goal = "ICO",
+           rgn_id = as.integer(rgn_id)) %>%
     select(region_id = rgn_id, goal, dimension, score)
 
   # return scores
@@ -1448,7 +1447,8 @@ LSP = function(layers){
     #        dimension = 'trend')
 
     scores_LSP <- rbind(lsp_status, lsp_trend) %>%
-      mutate(goal = "LSP") %>%
+      mutate(goal = "LSP",
+             rgn_id = as.integer(rgn_id)) %>%
       select(region_id = rgn_id, goal, dimension, score)
 
     # return scores
@@ -1553,7 +1553,7 @@ HAB = function(layers){
     summarize(score = (1 - mean(risk.wt)) * 100)
 
   #calculate status for plant habitats
-  plant_status <- filter(final_hab_data, kingdom == 'PLANTAE') %>%
+  plant_status <- filter(hab_data, kingdom == 'PLANTAE') %>%
     group_by(species) %>%
     filter(year == max(year)) %>%
     ungroup %>%
@@ -1575,7 +1575,8 @@ HAB = function(layers){
 
   # return scores
   scores_HAB <- rbind(hab_status, hab_trend) %>%
-    mutate(goal = "HAB") %>%
+    mutate(goal = "HAB",
+           rgn_id = as.integer(rgn_id)) %>%
     select(region_id = rgn_id, goal, dimension, score)
 
   # return scores
@@ -1599,17 +1600,17 @@ SPP = function(layers){
 
   # Trend calculations
   ## find species with multiple assessments
-  dup_species <- spp_data$species[duplicated(spp_data[,1:3])]
+  dup_species <- spp_data$species[duplicated(spp_data[,1])]
 
   spp_trend_prep <- spp_data %>%
     filter(species %in% dup_species) %>%
     group_by(species) %>%
-    unique(.) %>%
     filter(year == max(year) | year == min(year)) %>%
+    ungroup() %>%
     group_by(species, year) %>%
     summarize(risk.wt_new = mean(risk.wt)) %>%
-    arrange(year) %>%
-    distinct(year) %>%
+    ungroup() %>%
+    group_by(species) %>%
     mutate(year = ifelse(year == max(year), "max_year", "min_year"))
 
     #remove species that have been assessed multiple times in the same year
@@ -1640,7 +1641,8 @@ SPP = function(layers){
 
   # return scores
   scores_SPP <- rbind(spp_status, spp_trend) %>%
-    mutate(goal = "SPP") %>%
+    mutate(goal = "SPP",
+           rgn_id = as.integer(rgn_id)) %>%
     select(region_id = rgn_id, goal, dimension, score)
 
   # return scores
