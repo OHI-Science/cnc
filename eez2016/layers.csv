@@ -389,7 +389,7 @@ Data sources:
 Data sources:
 
 - [International Union for Conservation of Nature (IUCN)](http://www.iucnredlist.org/technical-documents/classification-schemes/threats-classification-scheme)
-","equal","global scores were applied equally to each region. ","spp_status","~/github/ohi-global/eez2016/layers/spp_status.csv","rgn_id",,"species","year","risk.wt",,TRUE,2006,2016,0,0.8,TRUE,"iucn_status",,79,1,FALSE
+","equal","global scores were applied equally to each region. ","spp_status","~/github/ohi-global/eez2016/layers/spp_status.csv",,,"species","year","risk.wt",,TRUE,2006,2016,0,0.8,TRUE,"iucn_status",,108,1,FALSE
 "TR","tr_jobs_pct_tourism","tr_jobs_pct_tourism_gl2016.csv","Ep","percent","Percent direct employment in tourism","Percent direct employment in tourism (WTTC).
 
 Data sources:
