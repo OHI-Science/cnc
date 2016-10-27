@@ -18,5 +18,5 @@ po_water,ecological,regulatory,pollution,1
 li_gci,social,social,social,1
 li_sector_evenness,social,social,social,1
 wgi_all,social,social,social,1
-fp_reporting,ecological,regulatory,fishing_pressure,1
-fp_license,ecological,regulatory,fishing_pressure,1
+fis_reporting,ecological,regulatory,fishing_pressure,1
+fis_license,ecological,regulatory,fishing_pressure,1
