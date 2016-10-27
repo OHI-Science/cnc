@@ -345,10 +345,17 @@ Data sources:
 
 Data sources:
 
+<<<<<<< HEAD
 - [Worldwide Governance Indicators (WGI)](http://info.worldbank.org/governance/wgi/index.asp)","equal","global resilience data were applied equally to all regions.","wgi_all","~/github/ohi-global/eez2016/layers/wgi_all.csv","rgn_id",,,,"resilience_score",,TRUE,,,0.695723122829157,0.695723122829157,TRUE,,,,1,FALSE
 "resilience","fis_reporting","fis_reporting.csv","reporting","resilience score","number of fisher reporting with target 100%","number of fisher reporting with target 100%","","","","~/github/ohi-global/eez2016/layers/fis.reporting.csv","rgn_id",,,"year","reporting",,TRUE,2011,2015,1,1,TRUE,,,,1,FALSE
 "resilience","fis_license","fis_license.scv","license","resilience score","number of pelagic fishing licenses reference is 18 plus minus 1","number of pelagic fishing licenses reference is 18 plus minus 1","","","","~/github/ohi-global/eez2016/layers/fis_license.csv",,,,,,,FALSE,,,,,FALSE,,,,1,
 "spatial","rgn_area","rgn_area.csv","area_km2","km^2","Region area of total EEZ ocean","Area of Ocean Health Index regions based on exclusive economic zones (VLIZ 2012).
+=======
+- [Worldwide Governance Indicators (WGI)](http://info.worldbank.org/governance/wgi/index.asp)",equal,global resilience data were applied equally to all regions.,wgi_all,~/github/ohi-global/eez2016/layers/wgi_all.csv,rgn_id,,,,resilience_score,,TRUE,,,0.695723123,0.695723123,TRUE,,,,1,FALSE
+resilience,fis_reporting,fis_reporting.csv,reporting,resilience score,number of fisher reporting with target 100%,number of fisher reporting with target 100%,,,,~/github/ohi-global/eez2016/layers/fis.reporting.csv,rgn_id,,,,,,,,,,,,,,,,
+resilience,fis_license,fis_license.csv,license,resilience score,number of pelagic fishing licenses reference is 18 plus minus 1,number of pelagic fishing licenses reference is 18 plus minus 1,,,,~/github/ohi-global/eez2016/layers/fis_license.csv,rgn_id,,,,,,,,,,,,,,,,
+spatial,rgn_area,rgn_area.csv,area_km2,km^2,Region area of total EEZ ocean,"Area of Ocean Health Index regions based on exclusive economic zones (VLIZ 2012).
+>>>>>>> 978cd1619466bafcf6ecc1c2da9bf87c640c73c3
 
 Data sources:
 
