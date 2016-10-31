@@ -48,10 +48,10 @@ FIS= function(layers){
   filter(weights, rgn_id ==1, year==2011)
 
 
-
  ############################################################
   #####   Join scores and weights to calculate status
   ############################################################
+  #Senario 2
 #
 #
 #   #for global model/senario
@@ -90,9 +90,23 @@ FIS= function(layers){
 #       dimension = 'status')%>%
 #     select(rgn_id, score=status_gl, dimension)
 #   #42.9 for global model using nc data from 2011-2015 but with penaly for underfishing
+#
+#  fis_status <- status_gl %>%
+#    filter(year == max(year)) %>%
+#    mutate(score =round(status_gl*100,1), #not sure why *100 is not working in this code added this code below
+#           dimension = 'status')%>%
+#    select(rgn_id, score=status_gl, dimension)
+
+#  fis_status$score<-fis_status$score*100 #translates the proportion score into a percentage
+
+  # # return scores for New Caledonia Model
+  # scores <-  rbind(status_gl, trend_gl) %>%
+  #   mutate('goal'='FIS') %>%
+  #   select(goal, dimension, region_id = rgn_id, score) %>%
+  #   data.frame()
 
 
-  #######for local cnc model###########3
+   #######Senario 1 - for local cnc model###########3
   status_cnc <- weights %>%
     left_join(scores_cnc, by=c('rgn_id', 'year', 'stock')) %>%
     # remove missing data
